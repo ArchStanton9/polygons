@@ -28,6 +28,8 @@ endif()
 
 # include for local directory
 
+configure_file(plot.sh plot.sh COPYONLY)
+
 # include for local package
 
 
@@ -41,5 +43,4 @@ set(CMAKE_CXX_STANDARD 14)
 
 set(SOURCE_FILES src/main.cpp src/PolygonSerializer.cpp src/PolygonSerializer.h)
 
-#add_executable(Polygons ${SOURCE_FILES})
 create_single_source_cgal_program( ${SOURCE_FILES} )

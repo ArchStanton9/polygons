@@ -1,25 +1,36 @@
 #include <iostream>
+
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Polygon_2.h>
+#include <CGAL/Polyline_simplification_2/simplify.h>
+
 #include "PolygonSerializer.h"
+#include "PolygonFactory.h"
 
 typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
 typedef CGAL::Point_2<K> Point;
 typedef CGAL::Polygon_2<K> Polygon;
 
-int main() {
+namespace PS = CGAL::Polyline_simplification_2;
+typedef PS::Stop_below_count_ratio_threshold Stop;
+typedef PS::Squared_distance_cost            Cost;
+
+int main(int argc, char* argv[]) {
+    if (argc != 2)
+        return -1;
+
+    double threshold = std::stof(argv[1]);
+
+    std::cout << "threshold = " << threshold << std::endl;
+
     PolygonSerializer serializer;
+    Polygon p = serializer.Deserialize("input.p");
+    std::cout << p << std::endl;
 
-    Polygon p;
-    p.push_back(Point(32, 12));
-    p.push_back(Point(34, 22));
-    p.push_back(Point(55, 18));
-    p.push_back(Point(11, 2));
+    Cost cost;
+    p = PS::simplify(p, cost, Stop(threshold));
 
-    serializer.Serialize("out.p", p);
-
-    Polygon p2 = serializer.Deserialize("out.p");
-    std::cout << p << std::endl << p2;
+    serializer.Serialize("output.p", p);
 
     return 0;
 }
