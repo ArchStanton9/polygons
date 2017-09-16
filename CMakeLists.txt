@@ -39,7 +39,12 @@ include( CGAL_CreateSingleSourceCGALProgram )
 
 set(CMAKE_CXX_STANDARD 14)
 
-set(SOURCE_FILES src/main.cpp src/PolygonSerializer.cpp src/PolygonSerializer.h)
+set(SOURCE_FILES
+        src/main.cpp
+        src/PolygonSerializer.cpp
+        src/PolygonSerializer.h
+        src/PolygonFactory.h
+        src/PolygonFactory.cpp)
 
 #add_executable(Polygons ${SOURCE_FILES})
 create_single_source_cgal_program( ${SOURCE_FILES} )

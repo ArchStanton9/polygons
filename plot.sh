@@ -1,5 +1,7 @@
 #!/bin/bash
 
+data=build/out.p
+
 gnuplot -persist <<-EOFMarker
-    plot 'build/out.p' with filledcurves closed
+    plot '$data' with filledcurves closed
 EOFMarker
