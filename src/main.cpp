@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Polygon_2.h>
@@ -16,21 +17,29 @@ typedef PS::Stop_below_count_ratio_threshold Stop;
 typedef PS::Squared_distance_cost            Cost;
 
 int main(int argc, char* argv[]) {
-    if (argc != 2)
-        return -1;
 
-    double threshold = std::stof(argv[1]);
+    double threshold = argc == 2
+                       ? std::stof(argv[1])
+                       : 0.4;
 
     std::cout << "threshold = " << threshold << std::endl;
 
     PolygonSerializer serializer;
-    Polygon p = serializer.Deserialize("input.p");
-    std::cout << p << std::endl;
+    Polygon p;
+
+    if (!std::ifstream("input.p")) {
+        // create and save random polygon if input file is not specified
+        PolygonFactory factory;
+        p = factory.Build(50, 60, 12);
+        serializer.Serialize("input.p", p);
+    } else {
+        p = serializer.Deserialize("input.p");
+    }
 
     Cost cost;
     p = PS::simplify(p, cost, Stop(threshold));
 
     serializer.Serialize("output.p", p);
 
-    return 0;
+    return system("./plot.sh output.p");
 }
