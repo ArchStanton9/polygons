@@ -29,8 +29,10 @@ endif()
 # include for local directory
 
 configure_file(plot.sh plot.sh COPYONLY)
+include_directories(src/tools/)
 
 # include for local package
+
 
 
 # Creating entries for all C++ files with "main" routine
@@ -38,12 +40,18 @@ configure_file(plot.sh plot.sh COPYONLY)
 
 include( CGAL_CreateSingleSourceCGALProgram )
 
-
 set(CMAKE_CXX_STANDARD 14)
 
-set(SOURCE_FILES
-        src/main.cpp
-        src/PolygonSerializer.h
-        src/PolygonFactory.h)
+set(TOOLS_HEADERS
+        src/tools/PolygonFactory.h
+        src/tools/PolygonSerializer.h)
 
-create_single_source_cgal_program( ${SOURCE_FILES} )
+set(SIMPLIFY_SOURCE_FILES
+        src/simplify/simplify.cpp)
+
+set(INTERSECT_SOURCE_FILES
+        src/intersection/intersection.cpp)
+
+create_single_source_cgal_program(${INTERSECT_SOURCE_FILES})
+
+create_single_source_cgal_program(${SIMPLIFY_SOURCE_FILES})

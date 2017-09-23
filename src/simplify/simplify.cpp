@@ -1,3 +1,7 @@
+//
+// Created by arch on 9/23/17.
+//
+
 #include <iostream>
 #include <fstream>
 
@@ -5,8 +9,8 @@
 #include <CGAL/Polygon_2.h>
 #include <CGAL/Polyline_simplification_2/simplify.h>
 
-#include "PolygonSerializer.h"
-#include "PolygonFactory.h"
+#include <PolygonFactory.h>
+#include <PolygonSerializer.h>
 
 typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
 typedef CGAL::Polygon_2<K> Polygon;
@@ -16,10 +20,6 @@ typedef PS::Stop_below_count_ratio_threshold Stop;
 typedef PS::Squared_distance_cost            Cost;
 
 int main(int argc, char* argv[]) {
-
-//    PolygonFactory<K> factory;
-//    Polygon p = factory.Build(100, 50);
-
     double threshold = argc == 2
                        ? std::stof(argv[1])
                        : 0.4;
