@@ -9,7 +9,6 @@
 #include "PolygonFactory.h"
 
 typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
-typedef CGAL::Point_2<K> Point;
 typedef CGAL::Polygon_2<K> Polygon;
 
 namespace PS = CGAL::Polyline_simplification_2;
@@ -18,19 +17,22 @@ typedef PS::Squared_distance_cost            Cost;
 
 int main(int argc, char* argv[]) {
 
+//    PolygonFactory<K> factory;
+//    Polygon p = factory.Build(100, 50);
+
     double threshold = argc == 2
                        ? std::stof(argv[1])
                        : 0.4;
 
     std::cout << "threshold = " << threshold << std::endl;
 
-    PolygonSerializer serializer;
+    PolygonSerializer<K> serializer;
     Polygon p;
 
     if (!std::ifstream("input.p")) {
         // create and save random polygon if input file is not specified
-        PolygonFactory factory;
-        p = factory.Build(50, 60, 12);
+        PolygonFactory<K> factory;
+        p = factory.Build(50, 60);
         serializer.Serialize("input.p", p);
     } else {
         p = serializer.Deserialize("input.p");
