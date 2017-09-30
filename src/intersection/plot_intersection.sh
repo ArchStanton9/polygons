@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
-a="../../cmake-build-debug/a.p"
-b="../../cmake-build-debug/b.p"
+BASE_DIR="../../cmake-build-debug"
+
+# join all files starts with 'c'
+DATA="<(cat $BASE_DIR/c*.p)"
 
 gnuplot -persist <<-EOFMarker
     set style fill transparent solid 0.5 noborder
-    plot \
-    '$a' title 'a' with filledcurves closed ,\
-    '$b' title 'b' with filledcurves closed
+    plot '$DATA' \
+    title 'intersection' \
+    with filledcurves closed
 EOFMarker

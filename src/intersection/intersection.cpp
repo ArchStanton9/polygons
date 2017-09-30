@@ -9,8 +9,8 @@
 #include <PolygonFactory.h>
 
 typedef CGAL::Exact_predicates_exact_constructions_kernel Kernel;
-typedef Kernel::Point_2                                   Point_2;
 typedef CGAL::Polygon_2<Kernel>                           Polygon_2;
+typedef CGAL::Polygon_with_holes_2<Kernel>                Pwh;
 
 int main ()
 {
@@ -25,8 +25,20 @@ int main ()
 
     if ((CGAL::do_intersect (a, b)))
         std::cout << "The two polygons intersect in their interior." << std::endl;
-    else
+    else {
         std::cout << "The two polygons do not intersect." << std::endl;
+        return 0;
+    }
+
+    std::list<Pwh> intR;
+    CGAL::intersection(a, b, std::back_inserter(intR));
+
+    int n = 0;
+    for (auto it = intR.begin(); it != intR.end(); ++it) {
+        std::stringstream ss;
+        ss << "c" << ++n << ".p";
+        serializer.Serialize(ss.str(), *it);
+    }
 
     return 0;
 }
