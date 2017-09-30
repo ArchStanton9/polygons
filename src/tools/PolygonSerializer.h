@@ -19,6 +19,7 @@ class PolygonSerializer {
 public:
     // Allow to save polygon in file
     void Serialize(std::string file_path, CGAL::Polygon_2<Kernel> polygon);
+    void Serialize(std::string file_path, CGAL::Polygon_with_holes_2<Kernel> pwh);
 
     // Allow to read polygon from file
     CGAL::Polygon_2<Kernel> Deserialize(std::string file_path);
@@ -36,6 +37,24 @@ void PolygonSerializer<Kernel>::Serialize(std::string file_path, CGAL::Polygon_2
     out.close();
     cout << "Polygon saved in file: " << file_path << std::endl;
 }
+
+
+template <class Kernel>
+void PolygonSerializer<Kernel>::Serialize(std::string file_path, CGAL::Polygon_with_holes_2<Kernel> pwh) {
+    ofstream out(file_path);
+
+    CGAL::Polygon_2<Kernel> poly = pwh.outer_boundary();
+    for (auto i = poly.vertices_begin(); i != poly.vertices_end(); i++) {
+        out << i->x() << " " << i->y() << std::endl;
+    }
+
+    out.close();
+    cout << "Polygon with holes saved in file: " << file_path << std::endl;
+}
+
+
+
+
 
 template <class Kernel>
 CGAL::Polygon_2<Kernel> PolygonSerializer<Kernel>::Deserialize(std::string file_path) {
