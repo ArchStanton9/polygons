@@ -5,8 +5,8 @@
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 #include <CGAL/Boolean_set_operations_2.h>
 
-#include <PolygonSerializer.h>
-#include <PolygonFactory.h>
+#include <PolygonSerializer.hpp>
+#include <PolygonFactory.hpp>
 
 typedef CGAL::Exact_predicates_exact_constructions_kernel Kernel;
 typedef CGAL::Polygon_2<Kernel>                           Polygon_2;

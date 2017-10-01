@@ -10,8 +10,9 @@
 #include <fstream>
 #include <vector>
 
-#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
+#include <CGAL/Polygon_with_holes_2.h>
 #include <CGAL/Polygon_2.h>
+#include <CGAL/Point_2.h>
 
 template <class Kernel>
 class PolygonSerializer {
@@ -25,10 +26,10 @@ public:
     CGAL::Polygon_2<Kernel> Deserialize(std::string file_path);
 };
 
-using namespace std;
 
 template <class Kernel>
 void PolygonSerializer<Kernel>::Serialize(std::string file_path, CGAL::Polygon_2<Kernel> polygon) {
+    using namespace std;
     ofstream out(file_path);
     for (auto i = polygon.vertices_begin(); i != polygon.vertices_end(); i++) {
         out << i->x() << " " << i->y() << std::endl;
@@ -41,6 +42,7 @@ void PolygonSerializer<Kernel>::Serialize(std::string file_path, CGAL::Polygon_2
 
 template <class Kernel>
 void PolygonSerializer<Kernel>::Serialize(std::string file_path, CGAL::Polygon_with_holes_2<Kernel> pwh) {
+    using namespace std;
     ofstream out(file_path);
 
     CGAL::Polygon_2<Kernel> poly = pwh.outer_boundary();
@@ -58,6 +60,8 @@ void PolygonSerializer<Kernel>::Serialize(std::string file_path, CGAL::Polygon_w
 
 template <class Kernel>
 CGAL::Polygon_2<Kernel> PolygonSerializer<Kernel>::Deserialize(std::string file_path) {
+    using namespace std;
+
     fstream stream(file_path);
     stream.flags(ios_base::skipws);
 

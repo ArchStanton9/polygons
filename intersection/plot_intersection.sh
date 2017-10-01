@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-BASE_DIR="../../cmake-build-debug"
+BASE_DIR="../cmake-build-debug/intersection"
 
 # join all files starts with 'c'
 DATA="<(cat $BASE_DIR/c*.p)"

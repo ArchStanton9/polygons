@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-BASE_DIR="../../cmake-build-debug"
+BASE_DIR="../cmake-build-debug/intersection"
 
 a="$BASE_DIR/a.p"
 b="$BASE_DIR/b.p"

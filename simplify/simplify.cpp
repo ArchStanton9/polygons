@@ -9,8 +9,8 @@
 #include <CGAL/Polygon_2.h>
 #include <CGAL/Polyline_simplification_2/simplify.h>
 
-#include <PolygonFactory.h>
-#include <PolygonSerializer.h>
+#include <PolygonFactory.hpp>
+#include <PolygonSerializer.hpp>
 
 typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
 typedef CGAL::Polygon_2<K> Polygon;
@@ -43,5 +43,5 @@ int main(int argc, char* argv[]) {
 
     serializer.Serialize("output.p", p);
 
-    return system("./plot.sh output.p");
+    return 0;
 }

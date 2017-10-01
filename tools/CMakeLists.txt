@@ -1,8 +1,4 @@
-cmake_minimum_required(VERSION 3.7)
-
-project(polygons)
-
-set(CMAKE_CXX_STANDARD 14)
+project(tools)
 
 # CGAL and its components
 find_package( CGAL QUIET COMPONENTS  )
@@ -30,10 +26,6 @@ if ( NOT Boost_FOUND )
 endif()
 
 
-
-# Creating entries for all C++ files with "main" routine
-# ##########################################################
-
-add_subdirectory(tools)
-add_subdirectory(intersection)
-add_subdirectory(simplify)
+set(SOURCE_FILES
+        PolygonSerializer.hpp
+        PolygonFactory.hpp)
