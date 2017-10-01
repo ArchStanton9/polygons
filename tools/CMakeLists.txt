@@ -29,3 +29,6 @@ endif()
 set(SOURCE_FILES
         PolygonSerializer.hpp
         PolygonFactory.hpp)
+
+add_library(tools STATIC ${SOURCE_FILES})
+set_target_properties(tools PROPERTIES LINKER_LANGUAGE CXX)
