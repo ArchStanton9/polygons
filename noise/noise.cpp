@@ -4,18 +4,15 @@
 
 #include <iostream>
 #include <vector>
-#include <tuple>
 #include <random>
 #include <math.h>
 
-#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
+#include <CGAL/Simple_cartesian.h>
 #include <CGAL/Polygon_2.h>
-#include <CGAL/Line_2.h>
-#include <CGAL/squared_distance_2.h>
 
 #include <PolygonSerializer.hpp>
 
-typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
+typedef CGAL::Simple_cartesian<double> K;
 typedef CGAL::Polygon_2<K> Polygon;
 typedef CGAL::Point_2<K> Point;
 
@@ -25,33 +22,36 @@ public:
 	LineFunctor(double a, double b) {
 		this->a = a;
 		this->b = b;
-		this->dist = [](double x) { return 0.0; };
+
+		// no disturbance by default
+		this->disturbance = [](double x) { return 0.0; };
 	};
 
 	double a, b;
-	double (*dist) (double);
+	double (*disturbance) (double);
 
 	double operator()(double x) {
-		return a * x + b + dist(x);
+		return a * x + b + disturbance(x);
 	}
 };
 
 double sin_dist(double x) {
-	return std::sin(x * 100 ) * 0.5;
+	return std::sin(x) * 0.5;
 }
 
+// restore line laying on two given points 
 LineFunctor get_line(Point p1, Point p2) {
-	double a = (p2.y() - p1.y()) / (p1.x() + p2.x());
-	double b = p1.y() + p1.x() * a;
+	double a = (p2.y() - p1.y()) / (p2.x() - p1.x());
+	double b = p1.y() - p1.x() * a;
 
 	return LineFunctor(a, b);
 }
 
-std::list<double> get_random_numbers(size_t size, double min, double max) {
-	std::random_device rd;
-	std::mt19937 eng(rd());
-	std::uniform_real_distribution<> distr(min, max);
+std::random_device rd;
+std::mt19937 eng(rd());
 
+std::list<double> get_random_numbers(size_t size, double min, double max) {
+	std::uniform_real_distribution<> distr(min, max);
 	std::list<double> result;
 
 	for (size_t i = 0; i < size; i++)
@@ -62,48 +62,65 @@ std::list<double> get_random_numbers(size_t size, double min, double max) {
 	return result;
 }
 
-std::vector<Point> add_noise(Point p1, Point p2){
-    std::vector<Point> result;
-	result.push_back(p1);
-
-	double min = p1.x() < p2.x() ? p1.x() : p2.x();
-	double max = p1.x() > p2.x() ? p1.x() : p2.x();
+// tranform straight line to angled line
+std::vector<Point> add_noise(Point p1, Point p2) {
+	double min = std::min(p1.x(), p2.x());
+	double max = std::max(p1.x(), p2.x());
 
 	LineFunctor f = get_line(p1, p2);
-	f.dist = sin_dist;
+	f.disturbance = sin_dist;
 
-	std::list<double> numbers = get_random_numbers(3, min, max);
-	numbers.sort();
+	// todo calculate count based on length of interval
+	std::list<double> numbers = get_random_numbers(25, min, max);
 
+	p2.x() < p1.x() 
+		? numbers.sort(std::greater<double>())
+		: numbers.sort(std::less<double>());
+
+	std::vector<Point> result;
+	result.push_back(p1);
 	for each (auto x in numbers)
 	{
 		result.push_back(Point(x, f(x)));
 	}
-
 	result.push_back(p2);
 
-    return result;
+	return result;
+}
+
+Polygon add_noise(Polygon polygon) {
+	Polygon result;
+
+	for (auto i = polygon.vertices_begin(); i < polygon.vertices_end() - 1;)
+	{
+		auto p1 = *i++;
+		auto p2 = *i;
+
+		auto noize = add_noise(p1, p2);
+		for (auto p = noize.begin(); p < noize.end(); p++)
+		{
+			result.push_back(*p);
+		}
+	}
+
+	// make closure
+	auto last = polygon.vertices_end() - 1;
+	auto first = polygon.vertices_begin();
+
+	auto noize = add_noise(*last, *first);
+	for (auto p = noize.begin(); p < noize.end(); p++)
+	{
+		result.push_back(*p);
+	}
+	
+	return result;
 }
 
 int main() {
 	PolygonSerializer<K> sz;
 	
-	Point p1(0.0, 4.0);
-	Point p2(2.0, 0.0);
-
-	Polygon inP;
-	inP.push_back(p1);
-	inP.push_back(p2);
-	sz.Serialize("input.p", inP);
-
-	auto v = add_noise(p1, p2);
-
-	Polygon outP;
-	for each (Point point in v)
-	{
-		outP.push_back(point);
-	}
+	Polygon inP = sz.Deserialize("input.p");
+	Polygon outP = add_noise(inP);
 
 	sz.Serialize("output.p", outP);
 }
-

@@ -22,7 +22,7 @@ typedef PS::Squared_distance_cost            Cost;
 int main(int argc, char* argv[]) {
     double threshold = argc == 2
                        ? std::stof(argv[1])
-                       : 0.4;
+                       : 0.05;
 
     std::cout << "threshold = " << threshold << std::endl;
 
