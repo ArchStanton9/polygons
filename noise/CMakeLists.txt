@@ -1,8 +1,4 @@
-cmake_minimum_required(VERSION 3.7)
-
-project(polygons)
-
-set(CMAKE_CXX_STANDARD 14)
+project(noize)
 
 # CGAL and its components
 find_package( CGAL QUIET COMPONENTS  )
@@ -29,12 +25,19 @@ if ( NOT Boost_FOUND )
 
 endif()
 
+# include for local directory
+
+include_directories(../tools)
+
+# include for local package
 
 
 # Creating entries for all C++ files with "main" routine
 # ##########################################################
 
-add_subdirectory(tools)
-add_subdirectory(noise)
-add_subdirectory(intersection)
-add_subdirectory(simplify)
+include( CGAL_CreateSingleSourceCGALProgram )
+
+set(SOURCE_FILES
+        noise.cpp)
+
+create_single_source_cgal_program(${SOURCE_FILES})
