@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+BASE_DIR="../build/noise"
+
+a="$BASE_DIR/input.p"
+b="$BASE_DIR/output.p"
+
+gnuplot -persist <<-EOFMarker
+    set style fill transparent solid 0.5 noborder
+    plot \
+    '$a' title 'a' with lines ,\
+    '$b' title 'b' with lines
+EOFMarker
