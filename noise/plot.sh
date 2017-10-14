@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-BASE_DIR="../build/noise"
+BASE_DIR="../build/simplify/debug"
 
 a="$BASE_DIR/input.p"
 b="$BASE_DIR/output.p"

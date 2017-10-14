@@ -16,13 +16,15 @@ typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
 typedef CGAL::Polygon_2<K> Polygon;
 
 namespace PS = CGAL::Polyline_simplification_2;
-typedef PS::Stop_below_count_ratio_threshold Stop;
-typedef PS::Squared_distance_cost            Cost;
+typedef PS::Stop_below_count_ratio_threshold	 Stop;
+typedef PS::Squared_distance_cost				 Cost;
+typedef PS::Scaled_squared_distance_cost		 ScaledCost;
+typedef PS::Hybrid_squared_distance_cost<double> HybridCost;
 
 int main(int argc, char* argv[]) {
     double threshold = argc == 2
                        ? std::stof(argv[1])
-                       : 0.05;
+                       : 0.4;
 
     std::cout << "threshold = " << threshold << std::endl;
 
@@ -40,8 +42,16 @@ int main(int argc, char* argv[]) {
 
     Cost cost;
     p = PS::simplify(p, cost, Stop(threshold));
+    serializer.Serialize("SD_cost.p", p);
 
-    serializer.Serialize("output.p", p);
+	ScaledCost scaledCost;
+	p = PS::simplify(p, scaledCost, Stop(threshold));
+	serializer.Serialize("scaled_cost.p", p);
+
+	HybridCost hybridCost(4);
+	p = PS::simplify(p, hybridCost, Stop(threshold));
+	serializer.Serialize("hybrid_cost.p", p);
+
 
     return 0;
 }
