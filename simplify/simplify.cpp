@@ -12,9 +12,9 @@ typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
 typedef CGAL::Polygon_2<K> Polygon;
 
 namespace PS = CGAL::Polyline_simplification_2;
-typedef PS::Stop_below_count_ratio_threshold	 Stop;
-typedef PS::Squared_distance_cost				 Cost;
-typedef PS::Scaled_squared_distance_cost		 ScaledCost;
+typedef PS::Stop_below_count_ratio_threshold     Stop;
+typedef PS::Squared_distance_cost                Cost;
+typedef PS::Scaled_squared_distance_cost         ScaledCost;
 typedef PS::Hybrid_squared_distance_cost<double> HybridCost;
 
 int main(int argc, char* argv[]) {
