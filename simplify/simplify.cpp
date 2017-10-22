@@ -1,7 +1,3 @@
-//
-// Created by arch on 9/23/17.
-//
-
 #include <iostream>
 #include <fstream>
 
@@ -22,27 +18,28 @@ typedef PS::Scaled_squared_distance_cost		 ScaledCost;
 typedef PS::Hybrid_squared_distance_cost<double> HybridCost;
 
 int main(int argc, char* argv[]) {
-    double threshold = argc == 2
-                       ? std::stof(argv[1])
-                       : 0.4;
+	double threshold = argc == 2
+		? std::stof(argv[1])
+		: 0.4;
 
-    std::cout << "threshold = " << threshold << std::endl;
+	std::cout << "threshold = " << threshold << std::endl;
 
-    PolygonSerializer<K> serializer;
-    Polygon p;
+	PolygonSerializer<K> serializer;
+	Polygon p;
 
-    if (!std::ifstream("input.p")) {
-        // create and save random polygon if input file is not specified
-        PolygonFactory<K> factory;
-        p = factory.Build(50, 60);
-        serializer.Serialize("input.p", p);
-    } else {
-        p = serializer.Deserialize("input.p");
-    }
+	if (!std::ifstream("input.p")) {
+		// create and save random polygon if input file is not specified
+		PolygonFactory<K> factory;
+		p = factory.Build(50, 60);
+		serializer.Serialize("input.p", p);
+	}
+	else {
+		p = serializer.Deserialize("input.p");
+	}
 
-    Cost cost;
-    p = PS::simplify(p, cost, Stop(threshold));
-    serializer.Serialize("SD_cost.p", p);
+	Cost cost;
+	p = PS::simplify(p, cost, Stop(threshold));
+	serializer.Serialize("SD_cost.p", p);
 
 	ScaledCost scaledCost;
 	p = PS::simplify(p, scaledCost, Stop(threshold));
@@ -53,5 +50,5 @@ int main(int argc, char* argv[]) {
 	serializer.Serialize("hybrid_cost.p", p);
 
 
-    return 0;
+	return 0;
 }

@@ -1,7 +1,3 @@
-//
-// Created by arch on 10/7/17.
-//
-
 #include <iostream>
 #include <vector>
 #include <random>
@@ -28,7 +24,7 @@ public:
 	};
 
 	double a, b;
-	double (*disturbance) (double);
+	double(*disturbance) (double);
 
 	double operator()(double x) {
 		return a * x + b + disturbance(x);
@@ -73,7 +69,7 @@ std::vector<Point> add_noise(Point p1, Point p2) {
 	// todo calculate count based on length of interval
 	std::list<double> numbers = get_random_numbers(25, min, max);
 
-	p2.x() < p1.x() 
+	p2.x() < p1.x()
 		? numbers.sort(std::greater<double>())
 		: numbers.sort(std::less<double>());
 
@@ -112,13 +108,13 @@ Polygon add_noise(Polygon polygon) {
 	{
 		result.push_back(*p);
 	}
-	
+
 	return result;
 }
 
 int main() {
 	PolygonSerializer<K> sz;
-	
+
 	Polygon inP = sz.Deserialize("input.p");
 	Polygon outP = add_noise(inP);
 
