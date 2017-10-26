@@ -1,0 +1,24 @@
+project(wrapper)
+
+set(PYTHON_INCLUDE_DIRS "C:/Anaconda3/include")
+
+message(STATUS "  INCLUDE: ${Boost_INCLUDE_DIRS}")
+message(STATUS "  INCLUDE: ${PYTHON_INCLUDE_DIRS}")
+
+INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
+
+FIND_PACKAGE(PythonInterp)
+FIND_PACKAGE(PythonLibs)
+
+FIND_PACKAGE(Boost COMPONENTS python3 REQUIRED)
+
+
+#set(Boost_USE_STATIC_LIBS OFF)
+#set(Boost_USE_MULTITHREADED ON)
+#set(Boost_USE_STATIC_RUNTIME OFF)
+
+set(SOURCE_FILES
+    wrapper.cpp)
+
+add_library(wrapper STATIC ${SOURCE_FILES})
+TARGET_LINK_LIBRARIES(wrapper ${Boost_LIBRARIES})
