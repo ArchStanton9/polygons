@@ -16,7 +16,7 @@ int main() {
     std::copy_n(Generator(triangle), 55, std::back_inserter(points));
 
     std::stringstream st;
-    for each (auto p in points) {
+    for(auto p: points) {
         st << p.x() << " " << p.y() << std::endl;
     }
 
