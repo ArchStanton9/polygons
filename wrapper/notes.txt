@@ -1,0 +1,3 @@
+Config to build boost.python by VS2017 x64 in 'user-config.jam' file.
+
+Command: b2 address-model=64 --with-python --user-config=user-config.jam

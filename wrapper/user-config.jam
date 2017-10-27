@@ -1,0 +1,12 @@
+import option ; 
+import toolset : using ;
+ 
+using msvc : 14.1 :  ; 
+
+using python 
+  : 3.6  # Version
+  : C:\\Anaconda3\\python.exe  # Interpreter
+  : C:\\Anaconda3\\include  # inc dir
+  : C:\\Anaconda3\\libs  # link libs
+  : # conditions
+  ;
