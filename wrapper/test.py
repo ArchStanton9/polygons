@@ -1,4 +1,4 @@
-import build.wrapper.Debug.boost_python3 as CGAL
+import build.wrapper.Debug.wrapper as CGAL
 
 print(CGAL.yay())
 

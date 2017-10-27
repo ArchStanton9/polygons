@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.7)
 project(polygons)
 
 set(CMAKE_CXX_STANDARD 14)
-# set(BOOST_ROOT "E:/Dev/boost_1_65_1")
 
 # CGAL and its components
 find_package( CGAL QUIET COMPONENTS  )
