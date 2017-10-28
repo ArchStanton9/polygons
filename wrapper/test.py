@@ -1,4 +1,4 @@
 import build.wrapper.Debug.wrapper as CGAL
 
-print(CGAL.yay())
-
+points = list(CGAL.random().points())
+print(len(points))
