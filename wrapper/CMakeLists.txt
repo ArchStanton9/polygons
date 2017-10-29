@@ -9,6 +9,8 @@ INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
 message(STATUS "INCLUDE Boost:'${Boost_INCLUDE_DIRS}'")
 message(STATUS "INCLUDE Python:'${PYTHON_INCLUDE_DIRS}'")
 
+include_directories(../external/)
+
 # configure boost
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)

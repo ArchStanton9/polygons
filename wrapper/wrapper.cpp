@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <boost/python.hpp>
+#include <halton.hpp>
 
 #include <CGAL/Simple_cartesian.h>
 #include <CGAL/point_generators_2.h>
@@ -10,7 +11,7 @@
 typedef CGAL::Simple_cartesian<double>              K;
 typedef K::Triangle_2                               Triangle;
 typedef K::Point_2                                  Point;
-typedef CGAL::Random_points_in_triangle_2<Point>    Generator;
+typedef CGAL::Random_points_in_square_2<Point>    Generator;
 
 using namespace boost::python;
 
@@ -36,10 +37,15 @@ public:
 class PointSet {
 public:
     PointSet() { }
+
     PointSet(std::vector<Point> points) {
         std::transform(points.begin(), points.end(),
             std::back_inserter(source),
             [](Point p) {return PyPoint(p); });
+    }
+    
+    PointSet(std::vector<PyPoint> points) {
+        source = points;
     }
 
     std::vector<PyPoint>::iterator begin() {
@@ -56,10 +62,26 @@ private:
 
 #pragma endregion
 
-PointSet GeneratePoints() {
-    Triangle triangle(Point(0.0, 0.0), Point(50.0, 0.0), Point(0.0, 50.0));
+
+PointSet GeneratePoints(int count) {
+    assert(count > 0);
+
     std::vector<Point> points;
-    std::copy_n(Generator(triangle), 55, std::back_inserter(points));
+    std::copy_n(Generator(0.5), count, std::back_inserter(points));
+
+    return PointSet(points);
+}
+
+PointSet GenerateHalton(int count) {
+    assert(count > 0);
+
+    Halton<> hx(2, 7), hy(3, 5);
+    std::vector<PyPoint> points;
+    
+    while (count-- > 0) {
+        auto point = PyPoint(hx() - 0.5, hy() - 0.5);
+        points.emplace_back(point);
+    }
 
     return PointSet(points);
 }
@@ -79,6 +101,7 @@ BOOST_PYTHON_MODULE(wrapper) {
         .def_readwrite("y", &PyPoint::y);
 
     def("random", GeneratePoints);
+    def("halton", GenerateHalton);
 
     def("yay", yay);
 }
