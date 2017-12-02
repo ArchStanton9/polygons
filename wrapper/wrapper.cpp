@@ -13,7 +13,7 @@
 typedef CGAL::Simple_cartesian<double>          K;
 typedef K::Triangle_2                           Triangle;
 typedef K::Point_2                              Point;
-typedef K::Angle                              Angle;
+typedef K::Angle                                Angle;
 typedef CGAL::Delaunay_triangulation_2<K>       Triangulation;
 typedef CGAL::Random_points_in_square_2<Point>  Generator;
 
