@@ -1,0 +1,7 @@
+Config to build boost.python by VS2017 x64 in 'user-config.jam' file.
+
+Command: b2 address-model=64 --with-python --user-config=user-config.jam
+
+MSVC compiler append some postfixes like "*-vc141-mt-gd-1_65_1.lib" to names of binaries.
+Need to cut em all, otherwise CMAKE can't find the libs.
+Lib name should be exactly 'boost_python3.lib'.
