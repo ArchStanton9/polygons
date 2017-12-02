@@ -29,6 +29,7 @@ endif()
 
 # include for local directory
 
+SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 include_directories(../tools/)
 
 # include for local package
@@ -39,6 +40,6 @@ include_directories(../tools/)
 
 include( CGAL_CreateSingleSourceCGALProgram )
 
-set(SOURCE_FILES minkowski.cpp)
+set(SOURCE_FILES minkowski.cpp minkowski_diff.hpp)
 
 create_single_source_cgal_program(${SOURCE_FILES})
