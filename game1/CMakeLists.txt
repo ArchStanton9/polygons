@@ -1,7 +1,4 @@
-cmake_minimum_required(VERSION 3.7)
-project(polygons)
-
-set(CMAKE_CXX_STANDARD 14)
+project(game1)
 
 # CGAL and its components
 find_package( CGAL QUIET COMPONENTS  )
@@ -16,6 +13,7 @@ endif()
 # include helper file
 include( ${CGAL_USE_FILE} )
 
+
 # Boost and its components
 find_package( Boost REQUIRED )
 
@@ -27,15 +25,20 @@ if ( NOT Boost_FOUND )
 
 endif()
 
+
+
+# include for local directory
+
+include_directories(../tools/)
+
+# include for local package
+
+
 # Creating entries for all C++ files with "main" routine
 # ##########################################################
 
-add_subdirectory(tools)
-add_subdirectory(noise)
-add_subdirectory(intersection)
-add_subdirectory(simplify)
-add_subdirectory(grid)
-add_subdirectory(wrapper)
-add_subdirectory(minkowski)
-add_subdirectory(difference)
-add_subdirectory(game1)
+include( CGAL_CreateSingleSourceCGALProgram )
+
+set(SOURCE_FILES game.cpp)
+
+create_single_source_cgal_program(${SOURCE_FILES})

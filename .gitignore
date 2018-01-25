@@ -89,3 +89,4 @@ fabric.properties
 /.vs
 /CMakeFiles
 /.vscode
+/CMakeCache.txt
