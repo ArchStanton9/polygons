@@ -14,7 +14,6 @@ gnuplot -persist <<-EOFMarker
     plot \
     '$P' title 'P' with filledcurves closed ,\
     '$Q' title 'Q' with filledcurves closed ,\
-    '$M' title 'M' with filledcurves closed ,\
-    '$W' title 'W' with filledcurves closed
+    '$M' title 'M' with filledcurves closed 
 
 EOFMarker
