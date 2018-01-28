@@ -86,6 +86,7 @@ fabric.properties
 .idea/
 .local/
 /build
+/presentation/build
 /.vs
 /CMakeFiles
 /.vscode
