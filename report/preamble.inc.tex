@@ -1,0 +1,39 @@
+\sloppy
+
+% Настройки стиля ГОСТ 7-32
+\EqInChapter % формулы будут нумероваться в пределах раздела
+\TableInChapter % таблицы будут нумероваться в пределах раздела
+\PicInChapter % рисунки будут нумероваться в пределах раздела
+
+\author{Кощеев Никита}
+\title{Отчет о производственной практике}
+\date{\today}
+
+\usepackage{pscyr}
+\renewcommand{\rmdefault}{ftm}
+
+\usepackage[
+bookmarks=true, colorlinks=true, unicode=true,
+urlcolor=black,linkcolor=black, anchorcolor=black,
+citecolor=black, menucolor=black, filecolor=black,
+]{hyperref}
+
+%\usepackage{graphicx}
+%\graphicspath{ {images/} }
+
+\geometry{right=20mm}
+\geometry{left=30mm}
+
+% Произвольная нумерация списков.
+\usepackage{enumerate}
+
+% ячейки в несколько строчек
+\usepackage{multirow}
+
+% itemize внутри tabular
+\usepackage{paralist,array}
+
+%\usepackage{enumerate}
+%\setcounter{tocdepth}{2}
+
+\newcommand{\dimension}{\mathbb{R}^2}
