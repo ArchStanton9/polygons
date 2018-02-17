@@ -91,3 +91,8 @@ fabric.properties
 /CMakeFiles
 /.vscode
 /CMakeCache.txt
+
+/report/G2-*
+/report/G7-*
+/report/G7-*
+/report/gost*
