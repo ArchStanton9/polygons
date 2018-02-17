@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-BASE_DIR="../build/difference"
+BASE_DIR="."
+#BASE_DIR="../build/difference"
 
 a="$BASE_DIR/a.p"
 b="$BASE_DIR/b.p"

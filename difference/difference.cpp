@@ -88,5 +88,6 @@ int main() {
         s.Serialize(ss.str(), *h);
     }
 
+    system("plot.sh");
     std::cin.get();
 }

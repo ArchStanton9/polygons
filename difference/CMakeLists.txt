@@ -31,14 +31,12 @@ endif()
 
 include_directories(../tools/)
 
-# include for local package
-
-
 # Creating entries for all C++ files with "main" routine
 # ##########################################################
 
 include( CGAL_CreateSingleSourceCGALProgram )
 
 set(SOURCE_FILES difference.cpp)
+configure_file(plot.sh plot.sh COPYONLY)
 
 create_single_source_cgal_program(${SOURCE_FILES})

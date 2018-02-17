@@ -30,6 +30,8 @@ endif()
 # Creating entries for all C++ files with "main" routine
 # ##########################################################
 
+add_subdirectory(core)
+add_subdirectory(tests)
 add_subdirectory(tools)
 add_subdirectory(noise)
 add_subdirectory(intersection)
