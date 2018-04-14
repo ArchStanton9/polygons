@@ -1,6 +1,11 @@
 #include <CGAL/minkowski_sum_2.h>
 
 template <class Kernel>
+static CGAL::Point_2<Kernel> reflect(CGAL::Point_2<Kernel> point) {
+    return CGAL::Point_2<Kernel>( - point.x(), - point.y());
+}
+
+template <class Kernel>
 static CGAL::Polygon_with_holes_2<Kernel> minkowski_diff(
     CGAL::Polygon_2<Kernel> left, CGAL::Polygon_2<Kernel> right) {
 
@@ -12,7 +17,3 @@ static CGAL::Polygon_with_holes_2<Kernel> minkowski_diff(
     return CGAL::minkowski_sum_2(left, temp);
 }
 
-template <class Kernel>
-static CGAL::Point_2<Kernel> reflect(CGAL::Point_2<Kernel> point) {
-    return CGAL::Point_2<Kernel>( - point.x(), - point.y());
-}

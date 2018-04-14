@@ -75,7 +75,7 @@ std::vector<Point> add_noise(Point p1, Point p2) {
 
 	std::vector<Point> result;
 	result.push_back(p1);
-	for each (auto x in numbers)
+	for(auto x : numbers)
 	{
 		result.push_back(Point(x, f(x)));
 	}

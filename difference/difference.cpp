@@ -35,12 +35,12 @@ Polygon get_bbox_polygon(Polygon polygon) {
 
 Pwh complement(Polygon polygon) {
     auto bbox = get_bbox_polygon(polygon);
-    Pwh compl(bbox);
+    Pwh result(bbox);
 
     polygon.reverse_orientation();
-    compl.add_hole(polygon);
+    result.add_hole(polygon);
 
-    return compl;
+    return result;
 }
 
 Polygon reflect(Polygon polygon) {
@@ -88,6 +88,6 @@ int main() {
         s.Serialize(ss.str(), *h);
     }
 
-    system("plot.sh");
+    // system("plot.sh");
     std::cin.get();
 }
