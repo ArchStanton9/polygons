@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-BASE_DIR="../build/game1"
+BASE_DIR="./build/game1/data"
 
 M="$BASE_DIR/M.p"
 

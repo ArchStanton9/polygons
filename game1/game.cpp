@@ -2,6 +2,7 @@
 #include <CGAL/minkowski_sum_2.h>
 
 #include <PolygonSerializer.hpp>
+#include <polygons2D.hpp>
 
 typedef CGAL::Exact_predicates_exact_constructions_kernel Kernel;
 typedef CGAL::Point_2<Kernel>                             Point;
@@ -84,43 +85,29 @@ Polygon geometry_difference(Polygon polyA, Polygon polyB) {
 
 
 int main() {
-    Polygon polyP;
-    for (auto p : { Point(-1, -1), Point(1, -1), Point(1, 1), Point(-1, 1) }) {
-        polyP.push_back(p);
-    }
-
-    Polygon polyQ;
-    for (auto p : { Point(0, 2), Point(2, 2), Point(0, 3) }) {
-        polyQ.push_back(p);
-    }
-
-    Polygon polyM;
-    for (auto p : { Point(3, 3), Point(6, 3), Point(6, 6), Point(3, 6) }) {
-        polyM.push_back(p);
-    }
+    PolygonSerializer<Kernel> s;
+    Polygon polyP = s.Deserialize("data/P.p");
+    Polygon polyQ = s.Deserialize("data/Q.p");
+    Polygon polyM = s.Deserialize("data/M.p");
 
     CGAL::set_pretty_mode(std::cout);
     std::cout << polyP << std::endl << polyQ << std::endl << polyM << std::endl;
-
+    
     assert(polyP.orientation() == CGAL::Orientation::POSITIVE);
     assert(polyQ.orientation() == CGAL::Orientation::POSITIVE);
     assert(polyM.orientation() == CGAL::Orientation::POSITIVE);
-    PolygonSerializer<Kernel> s;
 
     Polygon polyW = polyM;
     for (size_t i = 0; i < 5; i++) {
-        Pwh sum = CGAL::minkowski_sum_2(polyW, polyP);
-        polyW = geometry_difference(sum.outer_boundary(), polyQ);
+        auto sum = CGAL::minkowski_sum_2(polyW, polyP).outer_boundary();
+        polyW = Polygons2D::geometry_difference(sum, polyQ);        
 
         std::cout << polyW << std::endl;
         std::ostringstream ss;
-        ss << "W" << i << ".p";
+        ss << "data/" << "W" << i << ".p";
         s.Serialize(ss.str(), polyW);
     }
 
-    s.Serialize("P.p", polyP);
-    s.Serialize("Q.p", polyQ);
-    s.Serialize("M.p", polyM);
     std::cin.get();
 
     return 0;

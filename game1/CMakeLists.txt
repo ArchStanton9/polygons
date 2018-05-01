@@ -30,6 +30,7 @@ endif()
 # include for local directory
 
 include_directories(../tools/)
+include_directories(../core/)
 
 # include for local package
 
@@ -40,5 +41,7 @@ include_directories(../tools/)
 include( CGAL_CreateSingleSourceCGALProgram )
 
 set(SOURCE_FILES game.cpp)
+configure_file(plot.sh plot.sh COPYONLY)
+configure_file(plot_w.sh plot_w.sh COPYONLY)
 
 create_single_source_cgal_program(${SOURCE_FILES})

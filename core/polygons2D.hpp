@@ -37,12 +37,12 @@ namespace Polygons2D {
 
     Pwh complement(Polygon polygon) {
         auto bbox = get_bbox_polygon(polygon);
-        Pwh compl(bbox);
+        Pwh result(bbox);
 
         polygon.reverse_orientation();
-        compl.add_hole(polygon);
+        result.add_hole(polygon);
 
-        return compl;
+        return result;
     }
 
     const Transformation reflection = Transformation(
@@ -85,5 +85,3 @@ namespace Polygons2D {
         }
     }
 }
-
-
