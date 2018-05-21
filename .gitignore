@@ -96,3 +96,7 @@ fabric.properties
 /report/G7-*
 /report/G7-*
 /report/gost*
+
+*/other
+*/.vs
+*/.vscode
