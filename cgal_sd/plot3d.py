@@ -24,7 +24,7 @@ if __name__ == '__main__':
     colors = 100 * np.random.rand(len(verts))
     poly.set_array(np.array(colors))
 
-    ax.add_collection3d(poly, zs=range(10), zdir='y')
+    ax.add_collection3d(poly, zs=range(len(verts)), zdir='y')
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
     ax.set_zlabel('Z')
