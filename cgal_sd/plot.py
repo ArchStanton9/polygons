@@ -2,6 +2,10 @@ import numpy as np
 from matplotlib.patches import Polygon
 from matplotlib.collections import PatchCollection
 import matplotlib.pyplot as plt
+import glob
+
+np.random.seed(321421)
+patches = []
 
 def read_line_not_empty(file):
     line = ""
@@ -12,10 +16,6 @@ def read_line_not_empty(file):
 
 
 def draw_polygon(filename):
-
-    fig, ax = plt.subplots()
-    patches = []
-
     with open(filename) as file:
         polygons_count = int(read_line_not_empty(file))
         for p in range(polygons_count):
@@ -33,6 +33,27 @@ def draw_polygon(filename):
             print(points)
 
 
+def draw_polygons(paths):
+    for path in paths:
+        if str(path).count('*') > 0:
+            draw_polygons(glob.glob(path))
+            continue
+        else:
+            draw_polygon(path)
+
+
+if __name__ == '__main__':
+    import sys
+    
+    if len(sys.argv) > 1 and len(sys.argv[1]) > 0:
+        draw_polygons(sys.argv[1:])
+    else:    
+        draw_polygon("E:/Dev/polygons/cgal_sd/other/result/R_0.txt")
+        # draw_polygon("E:/Dev/polygons/cgal_sd/other/q.txt")
+        # draw_polygon("E:/Dev/polygons/cgal_sd/other/p.txt")
+        # draw_polygon("E:/Dev/polygons/cgal_sd/other/d.txt")
+
+    fig, ax = plt.subplots()
     colors = 100 * np.random.rand(len(patches))
     pc = PatchCollection(patches)
 
@@ -40,15 +61,4 @@ def draw_polygon(filename):
     ax.add_collection(pc)
     ax.grid()
     ax.axis('equal')
-
     plt.show()
-
-if __name__ == '__main__':
-    import sys
-    if len(sys.argv) > 1 and len(sys.argv[1]) > 0:
-        draw_polygon(sys.argv[1])
-
-    draw_polygon("E:/Dev/cgal_sd/other/result/S_0.txt")
-    # draw_polygon("E:/Dev/cgal_sd/other/q.txt")
-    # draw_polygon("E:/Dev/cgal_sd/other/p.txt")
-    # draw_polygon("E:/Dev/cgal_sd/other/d.txt")
