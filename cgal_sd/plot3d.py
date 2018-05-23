@@ -5,9 +5,6 @@ import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Fixing random state for reproducibility
-np.random.seed(196808127)
-
 def render(i):
     if i > 0:
         changed = any(p.is_changed for p in polygon_views)
@@ -41,7 +38,7 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         paths = sys.argv[1:]
     else:
-        paths = ["E:/Dev/polygons/cgal_sd/other/q.txt", "C:/Users/Arch Stanton/Desktop/an.txt"]
+        paths = ["./examples/1/results/R_*.txt"]
         
     polygon_views = read_polygons(paths)
 
@@ -49,6 +46,7 @@ if __name__ == '__main__':
         print("No polygons found.")
         sys.exit(-1)
 
+    np.random.seed(196808127)
     fig = plt.figure()
     ax = fig.gca(projection='3d')
     colors = 100 * np.random.rand(len(polygon_views))

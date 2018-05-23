@@ -1,27 +1,9 @@
 from polygon_view import PolygonView
+from matplotlib import style
 from matplotlib.patches import Polygon
 from matplotlib.collections import PatchCollection
-from matplotlib import style
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
-import numpy as np
-import glob
-
-np.random.seed(321421)
-
-
-def read_polygons(paths):
-    result = []
-    for path in paths:
-        if str(path).count('*') > 0:
-            data = read_polygons(glob.glob(path))
-            result.extend(data)
-            continue
-        else:
-            polygon = PolygonView(path)
-            result.append(polygon)
-
-    return result
 
 
 def render_poly(polygon_view: PolygonView, ax, i):
@@ -45,11 +27,20 @@ def render(i):
 
 
 if __name__ == '__main__':
-    p_poly = PolygonView("C:/Users/Arch Stanton/Desktop/an.txt", color='blue')
-    q_poly = PolygonView("C:/Users/Arch Stanton/Desktop/aq.txt", color='green')
-    r_poly = PolygonView("C:/Users/Arch Stanton/Desktop/ar.txt", color='red')
-
-    style.use('seaborn-bright')
+    import argparse
+    parser = argparse.ArgumentParser(description='Plot two polygons P,Q and target set R.')
+    parser.add_argument('--p', default="./examples/1/p.txt", help='polyon P')
+    parser.add_argument('--q', default="./examples/1/q.txt", help='polyon Q')
+    parser.add_argument('--r', default="./examples/1/r.txt", help='polyon R')
+    parser.add_argument('-s','--style', default='seaborn-bright',
+                        help=f'Plot style. Available: {str(", ").join(style.available)}.')
+    
+    args = parser.parse_args()
+    p_poly = PolygonView(args.p, color='blue')
+    q_poly = PolygonView(args.q, color='green')
+    r_poly = PolygonView(args.r, color='red')
+    style.use(args.style)
+    
     fig = plt.figure()
     axp = plt.subplot2grid((2,3), (0,0))
     axq = plt.subplot2grid((2,3), (1,0))

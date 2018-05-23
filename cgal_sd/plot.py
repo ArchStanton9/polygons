@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import glob
 
-np.random.seed(321421)
 
 def read_polygons(paths):
     result = []
@@ -51,14 +50,10 @@ if __name__ == '__main__':
     if len(sys.argv) > 1 and len(sys.argv[1]) > 0:
         polygon_views = read_polygons(sys.argv[1:])
     else:
-        path = "C:/Users/Arch Stanton/Desktop/an.txt"
-        # path = "E:/Dev/polygons/cgal_sd/other/result/R_0.txt"
-        # path = "E:/Dev/polygons/cgal_sd/other/q.txt"
-        # path = "E:/Dev/polygons/cgal_sd/other/p.txt"
-        # path = "E:/Dev/polygons/cgal_sd/other/d.txt"
+        print("Pass filenames for input files.", file=sys.stderr)
+        sys.exit(-1)
 
-        polygon_views = read_polygons([path])
-
+    np.random.seed(196808127)
     fig, ax = plt.subplots()
     colors = 100 * np.random.rand(len(polygon_views))
     ani = animation.FuncAnimation(fig, render, interval=2000)

@@ -100,3 +100,6 @@ fabric.properties
 */other
 */.vs
 */.vscode
+
+**/__pycache__
+*/examples/**/results
