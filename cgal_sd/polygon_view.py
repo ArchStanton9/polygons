@@ -2,9 +2,10 @@ import os
 import traceback
 
 class PolygonView:
-    def __init__(self, path):
+    def __init__(self, path, color='blue'):
         self.path = path
         self.valid = True
+        self.color = color
         self.timestamp = self._get_timestamp()        
         self.vertices = self._read_vertices()
 
