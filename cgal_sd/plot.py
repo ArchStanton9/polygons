@@ -1,34 +1,12 @@
-import numpy as np
+from polygon_view import PolygonView
 from matplotlib.patches import Polygon
 from matplotlib.collections import PatchCollection
+import matplotlib.animation as animation
 import matplotlib.pyplot as plt
+import numpy as np
 import glob
 
 np.random.seed(321421)
-
-
-def read_line_not_empty(file):
-    line = ""
-    while len(line) is 0:
-        line = file.readline().strip()
-
-    return line
-
-
-def read_polygon(filename):
-    with open(filename) as file:
-        polygons_count = int(read_line_not_empty(file))
-        for p in range(polygons_count):
-            vertices_count = int(read_line_not_empty(file))
-            points = []
-
-            for v in range(vertices_count):
-                line = read_line_not_empty(file)
-                p1, p2 = line.split()
-                points.append([float(p1), float(p2)])
-
-            return points
-
 
 def read_polygons(paths):
     result = []
@@ -38,40 +16,51 @@ def read_polygons(paths):
             result.extend(data)
             continue
         else:
-            points = read_polygon(path)
-            if points:
-                result.append(points)
+            polygon = PolygonView(path)
+            result.append(polygon)
 
     return result
+
+
+def render(i):
+    if i > 0:
+        changed = any(p.is_changed for p in polygon_views)
+        if not changed:
+            print(f"{i} no changes")
+            return
+    
+    patches = []
+    for polygon_view in polygon_views:            
+        vertices = polygon_view.fetch_vertices()
+        polygon = Polygon(vertices, True)
+        patches.append(polygon)
+    
+    pc = PatchCollection(patches)
+    pc.set_array(np.array(colors))
+
+    ax.clear()
+    ax.grid()
+    ax.add_collection(pc)
+    ax.axis('equal')
 
 
 if __name__ == '__main__':
     import sys
 
-    data = []
-
+    polygon_views = []
     if len(sys.argv) > 1 and len(sys.argv[1]) > 0:
-        data = read_polygons(sys.argv[1:])
+        polygon_views = read_polygons(sys.argv[1:])
     else:
-        path = "E:/Dev/polygons/cgal_sd/other/result/R_0.txt"
-        # draw_polygon("E:/Dev/polygons/cgal_sd/other/q.txt")
-        # draw_polygon("E:/Dev/polygons/cgal_sd/other/p.txt")
-        # draw_polygon("E:/Dev/polygons/cgal_sd/other/d.txt")
-        data.append(read_polygon(path))
+        path = "C:/Users/Arch Stanton/Desktop/an.txt"
+        # path = "E:/Dev/polygons/cgal_sd/other/result/R_0.txt"
+        # path = "E:/Dev/polygons/cgal_sd/other/q.txt"
+        # path = "E:/Dev/polygons/cgal_sd/other/p.txt"
+        # path = "E:/Dev/polygons/cgal_sd/other/d.txt"
+
+        polygon_views = read_polygons([path])
 
     fig, ax = plt.subplots()
-    patches = []
-
-    for row in data:
-        polygon = Polygon(row, True)
-        patches.append(polygon)
-
-    pc = PatchCollection(patches)
-    colors = 100 * np.random.rand(len(patches))
-    pc.set_array(np.array(colors))
-
-    ax.add_collection(pc)
-    ax.grid()
-    ax.axis('equal')
+    colors = 100 * np.random.rand(len(polygon_views))
+    ani = animation.FuncAnimation(fig, render, interval=2000)
 
     plt.show()
