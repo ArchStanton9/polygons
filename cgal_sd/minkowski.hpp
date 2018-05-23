@@ -71,11 +71,21 @@ void geometric_difference(Gp & a, Gp & b, Gp & sum)
   auto abox = a.bbox_sync();
   
   typename Gp::Polygon frame;
-  frame.push_back(Pt(2*abox.xmin(), 2*abox.ymin()));
-  frame.push_back(Pt(2*abox.xmax(), 2*abox.ymin()));
-  frame.push_back(Pt(2*abox.xmax(), 2*abox.ymax()));
-  frame.push_back(Pt(2*abox.xmin(), 2*abox.ymax()));
-  
+
+  auto const
+    x0 = abox.xmin(), x1 = abox.xmax(),
+    y0 = abox.ymin(), y1 = abox.ymax();
+  auto const
+    dx = 0.25 * (x1 - x0), dy = 0.25 * (y1 - y0);
+  auto const
+    X0 = x0 - dx, X1 = x1 + dx,
+    Y0 = y0 - dy, Y1 = y1 + dy;
+
+  frame.push_back(Pt(X0, Y0));
+  frame.push_back(Pt(X1, Y0));
+  frame.push_back(Pt(X1, Y1));
+  frame.push_back(Pt(X0, Y1));
+
   // Add the frame to a.
   auto & aps = a.polygon_set_modify();
   aps.symmetric_difference(frame);
