@@ -125,7 +125,7 @@ std::ostream& cgal_write_polygon
   (std::ostream & output, PolygonWithHoles const & polygon)
 {
   if (cgal_write_contour(output, polygon.outer_boundary())
-    && output << polygon.number_of_holes())
+    && output << polygon.number_of_holes() << "\n")
   {
     auto p = polygon.holes_begin();
     auto const e = polygon.holes_end();

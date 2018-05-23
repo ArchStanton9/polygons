@@ -57,8 +57,10 @@ bool try_write_step_to_file(Generic_polygon_2 polygon, int step, string_view fil
 	}
 
 	file.precision(prescision);
-	contours_write_polygons(file, polygon.polygons_with_holes_sync(), format);
+    cgal_write_polygons(file, polygon.polygons_with_holes_sync());
 	file.close();
+
+    return true;
 }
 
 int run_algorithm(Generic_polygon_2 & P, Generic_polygon_2 & Q, Generic_polygon_2 & R) {
