@@ -1,4 +1,5 @@
-from plot import read_polygons
+from polygon_view import PolygonView
+from helpers import extend_file_paths
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.collections import PolyCollection
 import matplotlib.animation as animation
@@ -40,7 +41,7 @@ if __name__ == '__main__':
     else:
         paths = ["./examples/1/results/R_*.txt"]
         
-    polygon_views = read_polygons(paths)
+    polygon_views = [PolygonView(p) for p in extend_file_paths(paths)]
 
     if len(polygon_views) is 0:
         print("No polygons found.")

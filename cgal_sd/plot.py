@@ -1,24 +1,10 @@
-from polygon_view import PolygonView
+from polygon_view import PolygonWithHolesView
+from helpers import extend_file_paths
 from matplotlib.patches import Polygon
 from matplotlib.collections import PatchCollection
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import numpy as np
-import glob
-
-
-def read_polygons(paths):
-    result = []
-    for path in paths:
-        if str(path).count('*') > 0:
-            data = read_polygons(glob.glob(path))
-            result.extend(data)
-            continue
-        else:
-            polygon = PolygonView(path)
-            result.append(polygon)
-
-    return result
 
 
 def render(i):
@@ -45,15 +31,16 @@ def render(i):
 
 if __name__ == '__main__':
     import sys
-
-    polygon_views = []
+    
     if len(sys.argv) > 1 and len(sys.argv[1]) > 0:
-        polygon_views = read_polygons(sys.argv[1:])
+        filenames = sys.argv[1:]
     else:
         print("Pass filenames for input files.", file=sys.stderr)
         sys.exit(-1)
 
-    np.random.seed(196808127)
+    polygon_views = [PolygonWithHolesView(p) for p in extend_file_paths(filenames)]
+
+    np.random.seed(1968081271)
     fig, ax = plt.subplots()
     colors = 100 * np.random.rand(len(polygon_views))
     ani = animation.FuncAnimation(fig, render, interval=2000)

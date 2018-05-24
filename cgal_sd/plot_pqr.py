@@ -1,18 +1,18 @@
-from polygon_view import PolygonView
+from polygon_view import PolygonWithHolesView
 from subprocess import call
 from matplotlib import style
-from matplotlib.patches import Polygon
+from matplotlib.patches import Polygon, PathPatch
 from matplotlib.collections import PatchCollection
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 
 
-def render_poly(polygon_view: PolygonView, ax, i):
+def render_poly(polygon_view: PolygonWithHolesView, ax, i):
     if i > 0 and not polygon_view.is_changed:
         return
 
-    vertices = polygon_view.fetch_vertices()
-    pc = PatchCollection([Polygon(vertices, True)])
+    path = polygon_view.fetch_path()
+    pc = PatchCollection([PathPatch(path)])
     pc.set_color(polygon_view.color)
 
     ax.clear()
@@ -33,7 +33,7 @@ def on_polygon_rendered(i):
     Start program to recalculate bridge, if polygon P,Q or M was changed.
     :param i: animation step number 
     """
-    
+
     if i < 1:
         return
 
@@ -43,7 +43,7 @@ def on_polygon_rendered(i):
             '--p', args.p,
             '--q', args.q,
             '--r', args.r,
-            '-o',  './examples/1/results/'
+            '-o', './examples/1/results/'
         ])
         print(res)
     except Exception as e:
@@ -61,9 +61,9 @@ if __name__ == '__main__':
                         help=f'Plot style. Available: {str(", ").join(style.available)}.')
 
     args = parser.parse_args()
-    p_poly = PolygonView(args.p, color='blue')
-    q_poly = PolygonView(args.q, color='green')
-    r_poly = PolygonView(args.r, color='red')
+    p_poly = PolygonWithHolesView(args.p, color='blue')
+    q_poly = PolygonWithHolesView(args.q, color='green')
+    r_poly = PolygonWithHolesView(args.r, color='red')
     style.use(args.style)
 
     fig = plt.figure()
