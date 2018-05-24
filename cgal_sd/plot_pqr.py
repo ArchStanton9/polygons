@@ -33,6 +33,7 @@ def on_polygon_rendered(i):
     Start program to recalculate bridge, if polygon P,Q or M was changed.
     :param i: animation step number 
     """
+    
 
     if i < 1:
         return
@@ -43,7 +44,7 @@ def on_polygon_rendered(i):
             '--p', args.p,
             '--q', args.q,
             '--r', args.r,
-            '-o', './examples/1/results/'
+            '-o', args.results
         ])
         print(res)
     except Exception as e:
@@ -54,13 +55,15 @@ if __name__ == '__main__':
     import argparse
 
     parser = argparse.ArgumentParser(description='Plot two polygons P,Q and target set R.')
-    parser.add_argument('--p', default="./examples/1/p.txt", help='polyon P')
-    parser.add_argument('--q', default="./examples/1/q.txt", help='polyon Q')
-    parser.add_argument('--r', default="./examples/1/r.txt", help='polyon R')
+    parser.add_argument('--p', default="./examples/2/p.txt", help='polyon P')
+    parser.add_argument('--q', default="./examples/2/q.txt", help='polyon Q')
+    parser.add_argument('--r', default="./examples/2/r.txt", help='polyon R')
+    parser.add_argument('--results', '-o', default="./examples/2/results/")
     parser.add_argument('-s', '--style', default='seaborn-bright',
                         help=f'Plot style. Available: {str(", ").join(style.available)}.')
 
     args = parser.parse_args()
+    print(args.results)
     p_poly = PolygonWithHolesView(args.p, color='blue')
     q_poly = PolygonWithHolesView(args.q, color='green')
     r_poly = PolygonWithHolesView(args.r, color='red')
