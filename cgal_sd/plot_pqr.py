@@ -1,4 +1,4 @@
-from polygon_view import PolygonWithHolesView
+from polygon_view import PolygonSetView
 from subprocess import call
 from matplotlib import style
 from matplotlib.patches import Polygon, PathPatch
@@ -7,12 +7,12 @@ import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 
 
-def render_poly(polygon_view: PolygonWithHolesView, ax, i):
+def render_poly(polygon_view: PolygonSetView, ax, i):
     if i > 0 and not polygon_view.is_changed:
         return
 
-    path = polygon_view.fetch_path()
-    pc = PatchCollection([PathPatch(path)])
+    patches = [PathPatch(p) for p in polygon_view.fetch_paths()]
+    pc = PatchCollection(patches)
     pc.set_color(polygon_view.color)
 
     ax.clear()
@@ -34,7 +34,6 @@ def on_polygon_rendered(i):
     :param i: animation step number 
     """
     
-
     if i < 1:
         return
 
@@ -55,18 +54,17 @@ if __name__ == '__main__':
     import argparse
 
     parser = argparse.ArgumentParser(description='Plot two polygons P,Q and target set R.')
-    parser.add_argument('--p', default="./examples/2/p.txt", help='polyon P')
-    parser.add_argument('--q', default="./examples/2/q.txt", help='polyon Q')
-    parser.add_argument('--r', default="./examples/2/r.txt", help='polyon R')
-    parser.add_argument('--results', '-o', default="./examples/2/results/")
+    parser.add_argument('--p', default="./examples/3/p.txt", help='polyon P')
+    parser.add_argument('--q', default="./examples/3/q.txt", help='polyon Q')
+    parser.add_argument('--r', default="./examples/3/r.txt", help='polyon R')
+    parser.add_argument('--results', '-o', default="./examples/3/results/")
     parser.add_argument('-s', '--style', default='seaborn-bright',
                         help=f'Plot style. Available: {str(", ").join(style.available)}.')
 
     args = parser.parse_args()
-    print(args.results)
-    p_poly = PolygonWithHolesView(args.p, color='blue')
-    q_poly = PolygonWithHolesView(args.q, color='green')
-    r_poly = PolygonWithHolesView(args.r, color='red')
+    p_poly = PolygonSetView(args.p, color='blue')
+    q_poly = PolygonSetView(args.q, color='green')
+    r_poly = PolygonSetView(args.r, color='red')
     style.use(args.style)
 
     fig = plt.figure()

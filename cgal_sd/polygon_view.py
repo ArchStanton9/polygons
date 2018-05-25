@@ -4,12 +4,37 @@ from matplotlib.path import Path
 
 def _read_contour(it):
     points_count = int(next(it))
+    if points_count < 3:
+        raise ValueError("Contour should contain at least 3 points")
+
     points = []
     for v in range(points_count):
         p1, p2 = next(it).split()
         points.append([float(p1), float(p2)])
 
     return points
+
+
+def _read_part_of_path(it):
+    vertices = _read_contour(it)
+    codes = [Path.MOVETO] + [Path.LINETO] * (len(vertices) - 1)
+
+    vertices.append([0, 0])
+    codes.append(Path.CLOSEPOLY)
+
+    return vertices, codes
+
+
+def _read_pwh(it):
+    vertices, codes = _read_part_of_path(it)
+
+    holes_count = int(next(it))
+    for h in range(holes_count):
+        hole_vertices, hole_codes = _read_part_of_path(it)
+        vertices.extend(hole_vertices)
+        codes.extend(hole_codes)
+
+    return Path(vertices, codes)
 
 
 class PolygonView:
@@ -45,8 +70,8 @@ class PolygonView:
 
     def _read_vertices(self, lines):
         it = iter(lines)
-
         polygons_count = int(next(it))
+
         if polygons_count is not 1:
             raise ValueError("Can not read more than 1 polygon")
 
@@ -80,36 +105,12 @@ class PolygonWithHolesView(PolygonView):
         self.path = None
 
     def _read_vertices(self, lines):
-        self.vertices.clear()
-        self.codes.clear()
-
         it = iter(lines)
         polygons_count = int(next(it))
         if polygons_count is not 1:
             raise ValueError("Can not read more than 1 polygon")
 
-        exterior = _read_contour(it)
-        self._add_points(exterior)
-
-        holes_count = int(next(it))
-        for h in range(holes_count):
-            hole = _read_contour(it)
-            self._add_points(hole)
-
-    def _add_points(self, points):
-        count = len(points)
-        if count < 3:
-            raise ValueError("Polygon should contain at least 3 points")
-
-        self.vertices.append(points[0])
-        self.codes.append(Path.MOVETO)
-
-        for i in range(1, count):
-            self.vertices.append(points[i])
-            self.codes.append(Path.LINETO)
-
-        self.vertices.append([0, 0])
-        self.codes.append(Path.CLOSEPOLY)
+        self.path = _read_pwh(it)
 
     def fetch_path(self):
         current_ts = self._get_timestamp()
@@ -120,3 +121,23 @@ class PolygonWithHolesView(PolygonView):
             self.timestamp = current_ts
 
         return self.path
+
+
+class PolygonSetView(PolygonView):
+    def __init__(self, filename, color='blue'):
+        super().__init__(filename, color)
+        self.paths = None
+
+    def _read_vertices(self, lines):
+        it = iter(lines)
+        polygons_count = int(next(it))
+        self.paths = [_read_pwh(it) for i in range(polygons_count)]
+
+    def fetch_paths(self):
+        current_ts = self._get_timestamp()
+
+        if current_ts > self.timestamp or self.paths is None:
+            self.read_vertices()
+            self.timestamp = current_ts
+
+        return self.paths
