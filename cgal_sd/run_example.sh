@@ -5,7 +5,7 @@ echo "running example ${1}"
     --p "./examples/${1}/p.txt" \
     --q "./examples/${1}/q.txt" \
     --r "./examples/${1}/r.txt" \
-    -o "./examples/${1}/results/"
+    -o "./examples/${1}/results/" --tr 0.01
 
 OUT=$?
 echo "Exit code: ${OUT}"

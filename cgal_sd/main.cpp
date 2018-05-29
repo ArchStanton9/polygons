@@ -12,6 +12,7 @@
 #include "polygon_io.hpp"
 #include "generic_polygon.hpp"
 #include "minkowski.hpp"
+#include "simplify.hpp"
 
 // args parsing
 #include <boost/program_options.hpp>
@@ -36,9 +37,11 @@ string p_path;
 string q_path;
 string r_path;
 string output_dir;
-int prescision;
+int precision;
 int steps;
 bool write_sum;
+double threshold_ratio; 
+
 
 Contours_io_flags const format{
 	Contours_io_flag::Store_contours_size,
@@ -56,7 +59,7 @@ bool try_write_step_to_file(Generic_polygon_2 polygon, int step, string_view fil
 		return false;
 	}
 
-	file.precision(prescision);
+	file.precision(precision);
     cgal_write_polygons(file, polygon.polygons_with_holes_sync());
 	file.close();
 
@@ -103,7 +106,8 @@ int main(int argc, char *argv[]) {
 			("r", po::value<string>()->required(), "target set")
 			("out,o", po::value<string>()->required(), "output folder")
 			("steps,s", po::value<int>()->default_value(10), "Count of steps.")
-			("pr", po::value<int>()->default_value(14), "Prescision of contours points io")
+			("pr", po::value<int>()->default_value(14), "Precision of contours points io")
+            ("tr", po::value<double>()->default_value(0.0), "Contour simplification threshold ratio")
 			("ws", po::bool_switch()->default_value(false), "Save obtained minkowski sum at every step.");
 
 		po::variables_map vm;
@@ -124,8 +128,9 @@ int main(int argc, char *argv[]) {
 		r_path = vm["r"].as<string>();
 		output_dir = vm["out"].as<string>();
 		steps = vm["steps"].as<int>();
-		prescision = vm["pr"].as<int>();
+		precision = vm["pr"].as<int>();
 	    write_sum = vm["ws"].as<bool>();
+        threshold_ratio = vm["tr"].as<double>();
 
 		clog 
 			<< "P polygon: " << p_path << "\n"
@@ -133,8 +138,9 @@ int main(int argc, char *argv[]) {
 			<< "R target: " << q_path << "\n"
 			<< "Output dir: " << output_dir << "\n"
 			<< "Steps: " << steps << "\n"
-			<< "Prescision: " << prescision << "\n"
-			<< "Write sum: " << write_sum << "\n";
+			<< "Precision: " << precision << "\n"
+			<< "Write sum: " << write_sum << "\n"
+            << "Threshold ratio: " << threshold_ratio << "\n";
 	}
 	catch (exception& e) {
 		cerr << e.what() << "\n";
@@ -184,6 +190,10 @@ int main(int argc, char *argv[]) {
 		R_file,
 		std::back_inserter(R.polygons_with_holes_modify()));
 	R_file.close();
+
+    if (threshold_ratio > 1 / 10000000){
+        simplify_gp(R, threshold_ratio);
+    }
 
 	return run_algorithm(P, Q, R);
 }
