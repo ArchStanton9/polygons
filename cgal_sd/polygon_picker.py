@@ -1,10 +1,5 @@
 from matplotlib import pyplot as plt
 
-WAIT_START = 0
-WAIT_POINT = 1
-
-input_node = 0
-
 
 class LineBuilder:
     def __init__(self, line):
@@ -18,13 +13,14 @@ class LineBuilder:
 
     def __call__(self, event):
         print('click', event)
-        if event.inaxes != self.line.axes: return
-        
+        if event.inaxes != self.line.axes:
+            return
+
         if event.button is 1:
             self.left_click(event)
         elif event.button is 3:
             self.right_click(event)
-        
+
         self.line.set_data(self.xs, self.ys)
         self.line.figure.canvas.draw()
 
@@ -32,18 +28,17 @@ class LineBuilder:
         self.xs.append(event.xdata)
         self.ys.append(event.ydata)
         self.buffer.append([event.xdata, event.ydata])
-        
+
         if self.start is None:
             self.start = (event.xdata, event.ydata)
-            return 
-
+            return
 
     def right_click(self, event):
         if len(self.buffer):
             self.result += str(len(self.buffer)) + '\n'
             for x, y in self.buffer:
                 self.result += f'{x} {y} \n'
-            
+
             self.result += '\n\n'
             self.xs.append(self.start[0])
             self.ys.append(self.start[1])
@@ -59,8 +54,6 @@ line, = ax.plot([0], [0])  # empty line
 ax.set_xlim(-0.3, 0.3)
 ax.set_ylim(-0.3, 0.3)
 linebuilder = LineBuilder(line)
-
-
 
 plt.show()
 print(linebuilder.result)

@@ -9,7 +9,7 @@ from polygon_view import PolygonWithHolesView
 import numpy as np
 import matplotlib.pyplot as plt
 
-paths = ['./examples/1/results/R_*.txt']
+paths = ['./examples/1/results/W_*.txt']
 polygon_views = [PolygonWithHolesView(p) for p in extend_file_paths(paths)]
 
 
@@ -46,7 +46,7 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         paths = sys.argv[1:]
     else:
-        paths = ["./examples/2/results/R_*.txt"]
+        paths = ["./examples/2/results/W_*.txt"]
 
     polygon_views = [PolygonWithHolesView(p) for p in extend_file_paths(paths)]
 

@@ -39,7 +39,7 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         paths = sys.argv[1:]
     else:
-        paths = ["./examples/1/results/R_*.txt"]
+        paths = ["./examples/1/results/W_*.txt"]
         
     polygon_views = [PolygonView(p) for p in extend_file_paths(paths)]
 

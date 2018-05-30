@@ -78,7 +78,11 @@ int run_algorithm(Generic_polygon_2 & P, Generic_polygon_2 & Q, Generic_polygon_
 			}
 
 			geometric_difference(S, Q, R);
-			if (!try_write_step_to_file(R, i, "R_")) {
+            if (threshold_ratio > 1 / 10000000){
+                simplify_gp(R, threshold_ratio);
+            }
+
+			if (!try_write_step_to_file(R, i, "W_")) {
 				return -12;
 			}
 		}

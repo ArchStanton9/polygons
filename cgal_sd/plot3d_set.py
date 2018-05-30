@@ -28,10 +28,17 @@ def render(i):
         patches = [PathPatch(p, facecolor=cmap(z), linewidth=0.2) for p in polygon.fetch_paths()]
         add_patches(patches, z)
 
-    ax.set_xlim(-2, 8)
+    ax.set_xlim(0, 10)
     ax.set_ylim(0, 10)
-    ax.set_zlim(-1, 6)
+    ax.set_zlim(0, 6)
 
+    ax.yaxis.set_label_text("t")
+    ax.xaxis.set_label_text("x")
+    ax.zaxis.set_label_text("y")
+
+    ax.set_yticklabels([])
+    ax.set_xticklabels([])
+    ax.set_zticklabels([])
 
 if __name__ == '__main__':
     import sys
@@ -40,7 +47,7 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         paths = sys.argv[1:]
     else:
-        paths = ["./examples/3/results/R_*.txt"]
+        paths = ["./examples/3/results/W_*.txt"]
 
     polygon_views = [PolygonSetView(p) for p in extend_file_paths(paths)]
 
