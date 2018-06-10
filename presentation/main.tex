@@ -1,8 +1,8 @@
 \documentclass{beamer}
 
   \mode<presentation> {
-    \usetheme{Pittsburgh}
-    \usecolortheme{whale}
+    \usetheme{boxes}
+    \usecolortheme{seagull}
   }
   
   \usepackage{pscyr}
@@ -19,7 +19,7 @@
   %   META
   %----------------------------------------------------------
 
-  \title[Отчет по НИР]{Отчет по НИР}  
+  \title[ОТЧЕТ по производственной  практике]{Задача аппроксимации максимального стабильного моста в позиционной дифференциальной игре}  
   \author{Кощеев Никита}
   \institute[УрФУ]{Институт естественных наук и математики}
   \date{30 января 2018}
@@ -56,35 +56,22 @@
   %------------------------------------------------
   \section{Постановка задачи} 
   %------------------------------------------------
-  
-  \subsection{Математическая модель} 
-  
+
   \begin{frame}
-    \frametitle{\subsecname}
-    
+    \frametitle{Пример игры}
+  
     \begin{equation}
-      \frac{dx}{dt} = f_1(x,t,u) + f_2(x,t,v)
+        \frac{dx}{dt} = u + v, u \in P, v \in Q
     \end{equation}
-  
-    \begin{itemize}
-      \item $t \in [0,\theta]$, где $\theta$ - момент окончания игры
-      \item $x \in \dimension$ - фазовый вектор
-      \item $u(t) \in P \subset \dimension$ - управление первого игрока
-      \item $v(t) \in Q \subset \dimension$ - управление второго игрока
-    \end{itemize}
-  \end{frame}
-  
-  %------------------------------------------------
-   
-  \begin{frame}
-    \frametitle{Цели игроков}
-  
-    $M \subset \dimension$ - целевое множество 
+
+    $R \subset \dimension$ - целевое множество 
     \vspace{5mm}
   
-    Цель первого игрока: обеспечить $x(\theta) \in M$
+    $\theta$ - момент окончания игры
 
-    Цель второго игрока: обеспечить $x(\theta) \notin M$
+    Цель первого игрока: обеспечить $x(\theta) \in R$
+
+    Цель второго игрока: обеспечить $x(\theta) \notin R$
 
   \end{frame}
   
@@ -95,13 +82,13 @@
 
     $W \in [t_0, \theta] \times \dimension$ - стабильный мост
 
-    $W(\theta)=M$
+    $W(\theta)=R$
 
     \begin{itemize}
       \item Применение оптимального управления первым игроком,
-      при $x_0 \in W(t_0)$ гарантирует $x(\theta) \in M$
+      при $x_0 \in W(t_0)$ гарантирует $x(\theta) \in R$
       \item Применение оптимального управления вторым игроком,
-      при $x_0 \notin W(t_0)$ гарантирует $x(\theta) \notin M$
+      при $x_0 \notin W(t_0)$ гарантирует $x(\theta) \notin R$
     \end{itemize}
 
   \end{frame}
@@ -109,19 +96,6 @@
   %------------------------------------------------
   
   \section{Решение}
-  
-  %------------------------------------------------
-  
-  \begin{frame}
-    \frametitle{Вспомогательная задача}
-
-    \begin{equation}
-      \frac{dx}{dt} = u + v, u \in P, v \in Q
-    \end{equation}
-
-    P и Q - выпуклые многоугольники
-
-  \end{frame}
   
   %------------------------------------------------
   
@@ -134,9 +108,9 @@
 
     Хотим получить набор \textit{t}-сечений моста W
 
-    $F_i = W_i + \Delta P$
+    $S_i = W_i \oplus \Delta P$
     
-    $W_{i+1} = F_i \ominus \Delta  Q$
+    $W_{i+1} = S_i \ominus \Delta  Q$
 
   \end{frame}
   
@@ -149,7 +123,7 @@
     Другое название - "сумма Минковского". 
     
     \begin{equation}
-      A + B =  \{ x + y | x \in A, y \in B \} 
+      A \oplus B =  \{ x + y | x \in A, y \in B \} 
     \end{equation}
 
     \includegraphics[width=1.0\textwidth]{minkowski_sum}
@@ -161,33 +135,37 @@
   \begin{frame}
     \frametitle{Геометрическая разность}
     
-    Операция обратная алгебраической сумме
-
     \begin{equation}
       A \ominus B =  \{ x | x + B \subseteq A \} 
     \end{equation}
 
-    \includegraphics[width=1.0\textwidth]{geom_diff}
-
-  \end{frame}
-  
-  %------------------------------------------------
-  
-  \begin{frame}
-    \frametitle{Пример игры}
-  
-    \includegraphics[width=1.0\textwidth]{game}
+    \begin{equation}
+        A \ominus B =
+        (\overline{\overline{A} \oplus (- B)})
+    \end{equation}    
 
   \end{frame}
   
   %------------------------------------------------
 
-  \begin{frame}
-    \frametitle{Сечения стабильного моста}
+  \subsection{CGAL} 
   
-    \includegraphics[width=1.0\textwidth]{bridge}
-    
-  \end{frame}
+  \begin{frame}
+    \frametitle{CGAL}
+    \includegraphics[width=1.0\textwidth]{cgal-logo}
+
+    The Computational Geometry Algorithms Library
+
+    Компоненты:
+
+    \begin{itemize}
+        \item 2D and 3D Linear Geometry Kernel
+        \item 2D Polygons
+        \item 2D Minkowski Sums
+        \item 2D Polyline Simplification
+    \end{itemize}
+
+    \end{frame}
 
   %------------------------------------------------ 
   \begin{frame}

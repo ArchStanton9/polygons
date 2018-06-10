@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 def add_patches(patches, z):
     for patch in patches:
         ax.add_patch(patch)
-        art3d.pathpatch_2d_to_3d(patch, z=z, zdir="y")
+        art3d.pathpatch_2d_to_3d(patch, z=z * 10 / len(polygon_views), zdir="y")
 
 
 def render(i):
@@ -47,7 +47,7 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         paths = sys.argv[1:]
     else:
-        paths = ["./examples/3/results/W_*.txt"]
+        paths = ["./examples/1/results/W_*.txt"]
 
     polygon_views = [PolygonSetView(p) for p in extend_file_paths(paths)]
 

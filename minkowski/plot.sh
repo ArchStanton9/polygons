@@ -10,11 +10,14 @@ diff="$BASE_DIR/diff.p"
 gnuplot -persist <<-EOFMarker
     set xzeroaxis solid 1 linewidth 2.5
     set yzeroaxis solid 1 linewidth 2.5
-    set style fill transparent solid 0.5
+    set style fill transparent solid
+    set ytics 1
+    set xtics 1
+    set grid
     plot \
+    '$diff' title 'diff' with filledcurves closed ,\
     '$a' title 'a' with filledcurves closed ,\
     '$b' title 'b' with filledcurves closed ,\
-    '$sum' title 'sum' with filledcurves closed ,\
-    '$diff' title 'diff' with filledcurves closed
-
+    '$sum' title 'sum' with filledcurves closed
+    
 EOFMarker

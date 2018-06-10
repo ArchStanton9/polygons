@@ -4,7 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
-
+#include <cmath>
 #include <iterator>
 #include <list>
 
@@ -35,10 +35,11 @@ using namespace std;
 
 string p_path;
 string q_path;
-string r_path;
+string m_path;
 string output_dir;
 int precision;
 int steps;
+double dt;
 bool write_sum;
 double threshold_ratio; 
 
@@ -49,7 +50,7 @@ Contours_io_flags const format{
 
 bool try_write_step_to_file(Generic_polygon_2 polygon, int step, string_view file_prefix) {
 	std::stringstream ss;
-	ss << output_dir << file_prefix << step << ".txt";
+	ss << output_dir << file_prefix << std::setw(5) << std::setfill('0') << step << ".txt";
 	string filepath = ss.str();
 	clog << "write step result " << step << " to file " << filepath << "\n";
 
@@ -66,23 +67,38 @@ bool try_write_step_to_file(Generic_polygon_2 polygon, int step, string_view fil
     return true;
 }
 
-int run_algorithm(Generic_polygon_2 & P, Generic_polygon_2 & Q, Generic_polygon_2 & R) {
+int run_algorithm(Generic_polygon_2 & P, Generic_polygon_2 & Q, Generic_polygon_2 & M) {
 	int i = 0;
 	Generic_polygon_2 S;
 
+    if (std::abs(dt - 1.0) > std::pow(0.1, 10))
+    {
+        clog << "scale P and Q with factor " << dt << "\n";
+        P.scale(dt);
+        Q.scale(dt);
+    }
+    
+    if (threshold_ratio > 1 / 10000000){
+        clog << "simplify input polygons with threshold ratio " << threshold_ratio << "\n";
+        simplify_gp(M, threshold_ratio);
+        simplify_gp(P, threshold_ratio);
+        simplify_gp(Q, threshold_ratio);
+    }
+
 	try {
 		for (; i < steps; i++) {
-			minkowski_sum(R, P, S);
+			minkowski_sum(M, P, S);
 			if (write_sum && !try_write_step_to_file(S, i, "S_")) {
 				return -11;
 			}
 
-			geometric_difference(S, Q, R);
-            if (threshold_ratio > 1 / 10000000){
-                simplify_gp(R, threshold_ratio);
-            }
+			geometric_difference(S, Q, M);
 
-			if (!try_write_step_to_file(R, i, "W_")) {
+            // if (threshold_ratio > 1 / 10000000){
+            //     simplify_gp(M, threshold_ratio);
+            // }
+
+			if (!try_write_step_to_file(M, i, "W_")) {
 				return -12;
 			}
 		}
@@ -107,9 +123,10 @@ int main(int argc, char *argv[]) {
 			("help,h", "print usage message")
 			("p", po::value<string>()->required(), "first polygon")
 			("q", po::value<string>()->required(), "second polygon")
-			("r", po::value<string>()->required(), "target set")
+			("m", po::value<string>()->required(), "target set")
 			("out,o", po::value<string>()->required(), "output folder")
 			("steps,s", po::value<int>()->default_value(10), "Count of steps.")
+            ("dt", po::value<double>()->default_value(1.0), "Time delta")
 			("pr", po::value<int>()->default_value(14), "Precision of contours points io")
             ("tr", po::value<double>()->default_value(0.0), "Contour simplification threshold ratio")
 			("ws", po::bool_switch()->default_value(false), "Save obtained minkowski sum at every step.");
@@ -129,9 +146,10 @@ int main(int argc, char *argv[]) {
 
 		p_path = vm["p"].as<string>();
 		q_path = vm["q"].as<string>();
-		r_path = vm["r"].as<string>();
+		m_path = vm["m"].as<string>();
 		output_dir = vm["out"].as<string>();
 		steps = vm["steps"].as<int>();
+        dt = vm["dt"].as<double>();
 		precision = vm["pr"].as<int>();
 	    write_sum = vm["ws"].as<bool>();
         threshold_ratio = vm["tr"].as<double>();
@@ -139,9 +157,10 @@ int main(int argc, char *argv[]) {
 		clog 
 			<< "P polygon: " << p_path << "\n"
 			<< "Q polygon: " << q_path << "\n"
-			<< "R target: " << q_path << "\n"
+			<< "M target: " << m_path << "\n"
 			<< "Output dir: " << output_dir << "\n"
 			<< "Steps: " << steps << "\n"
+            << "Delta t: " << dt << "\n"
 			<< "Precision: " << precision << "\n"
 			<< "Write sum: " << write_sum << "\n"
             << "Threshold ratio: " << threshold_ratio << "\n";
@@ -165,9 +184,9 @@ int main(int argc, char *argv[]) {
 		return -3;
 	}
 
-	ifstream R_file(r_path);
-	if (!R_file.is_open()) {
-		clog << "File " << r_path << " can't be open.\n";
+	ifstream M_file(m_path);
+	if (!M_file.is_open()) {
+		clog << "File " << m_path << " can't be open.\n";
 		return -4;
 	}
 
@@ -179,7 +198,7 @@ int main(int argc, char *argv[]) {
 	//   followed by the number of holes, and for each hole,
 	//   the number of points of the outer boundary is followed by the points themselves in clockwise order.
 
-	Generic_polygon_2 P, Q, R;
+	Generic_polygon_2 P, Q, M;
 	cgal_read_polygons<Polygon_with_holes_2>(
 		P_file,
 		std::back_inserter(P.polygons_with_holes_modify()));
@@ -191,13 +210,9 @@ int main(int argc, char *argv[]) {
 	Q_file.close();
 
 	cgal_read_polygons<Polygon_with_holes_2>(
-		R_file,
-		std::back_inserter(R.polygons_with_holes_modify()));
-	R_file.close();
+		M_file,
+		std::back_inserter(M.polygons_with_holes_modify()));
+	M_file.close();
 
-    if (threshold_ratio > 1 / 10000000){
-        simplify_gp(R, threshold_ratio);
-    }
-
-	return run_algorithm(P, Q, R);
+	return run_algorithm(P, Q, M);
 }

@@ -11,7 +11,6 @@
 #include <type_traits>
 #include <utility>
 
-
 #include <CGAL/Bbox_2.h>
 
 #include "assertions.hpp"
@@ -52,6 +51,14 @@ void ps_hackery_negate(Ps & pset)
     [](auto & p) { p = CGAL::ORIGIN + (CGAL::ORIGIN - p); });
 }
 
+template <class Ps>
+void ps_hackery_scale(Ps &pset, double factor)
+{
+  using Pt = typename Ps::Polygon_2::Point_2;
+  ps_hackery_for_each_point(pset,
+    [factor](auto &p) { p = Pt(p.x() * factor, p.y() * factor); });
+}
+
 /// This function applies f for each point, points may be changed in-place.
 /// The arrangement structure is left unchanged, that means that
 /// the function being applied must be continuous on the plane and save orientation.
@@ -84,6 +91,13 @@ void ph_hackery_negate(Ph & pwh)
     [](auto & p) { p = CGAL::ORIGIN + (CGAL::ORIGIN - p); });
 }
 
+template <class Ph>
+void ph_hackery_scale(Ph &pwh, double factor)
+{
+  using Pt = typename Ph::Polygon_2::Point_2;
+  ph_hackery_for_each_point(pwh,
+    [factor](auto &p) { p = Pt(p.x() * factor, p.y() * factor); });
+}
 
 //
 // Generic polygon class
@@ -223,6 +237,29 @@ public:
         (
           -_bbox.xmax(), -_bbox.ymax(),
           -_bbox.xmin(), -_bbox.ymin()
+        );
+    }
+  }
+
+  void scale(double factor)
+  {
+    if (_ph_changed || !(_ph_changed || _ps_changed))
+    {
+      for (auto & p: _ph)
+        ph_hackery_scale(p, factor);
+    }
+    
+    if (_ps_changed || !(_ph_changed || _ps_changed))
+    {
+      ps_hackery_scale(_ps, factor);
+    }
+    
+    if (_bbox_ready)
+    {
+      _bbox = CGAL::Bbox_2
+        (
+          _bbox.xmax() * factor, _bbox.ymax() * factor,
+          _bbox.xmin() * factor, _bbox.ymin() * factor
         );
     }
   }

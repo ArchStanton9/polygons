@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.7)
 project(polygons)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -O3 -Os")
 
 # CGAL and its components
 find_package( CGAL QUIET COMPONENTS  )
@@ -39,5 +39,5 @@ add_subdirectory(tools)
 # add_subdirectory(grid)
 # add_subdirectory(wrapper)
 # add_subdirectory(minkowski)
-# add_subdirectory(difference)
-add_subdirectory(game1)
+add_subdirectory(difference)
+# add_subdirectory(game1)

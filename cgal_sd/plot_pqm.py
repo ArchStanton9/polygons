@@ -26,7 +26,7 @@ def render_poly(polygon_view: PolygonSetView, ax, i):
 def render(i):
     render_poly(p_poly, axp, i)
     render_poly(q_poly, axq, i)
-    render_poly(r_poly, axr, i)
+    render_poly(m_poly, axm, i)
 
 
 def on_polygon_rendered(i):
@@ -43,7 +43,7 @@ def on_polygon_rendered(i):
             './build/main.exe',
             '--p', args.p,
             '--q', args.q,
-            '--r', args.r,
+            '--m', args.m,
             '-o', args.results
         ])
         print(res)
@@ -57,7 +57,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Plot two polygons P,Q and target set R.')
     parser.add_argument('--p', default="./examples/3/p.txt", help='polyon P')
     parser.add_argument('--q', default="./examples/3/q.txt", help='polyon Q')
-    parser.add_argument('--r', default="./examples/3/r.txt", help='polyon R')
+    parser.add_argument('--m', default="./examples/3/m.txt", help='polyon M')
     parser.add_argument('--results', '-o', default="./examples/3/results/")
     parser.add_argument('-s', '--style', default='seaborn-bright',
                         help=f'Plot style. Available: {str(", ").join(style.available)}.')
@@ -65,13 +65,13 @@ if __name__ == '__main__':
     args = parser.parse_args()
     p_poly = PolygonSetView(args.p, color='green')
     q_poly = PolygonSetView(args.q, color='red')
-    r_poly = PolygonSetView(args.r, color='blue')
+    m_poly = PolygonSetView(args.m, color='blue')
     style.use(args.style)
 
     fig = plt.figure()
     axp = plt.subplot2grid((2, 3), (0, 0), title='test')
     axq = plt.subplot2grid((2, 3), (1, 0))
-    axr = plt.subplot2grid((2, 3), (0, 1), colspan=2, rowspan=3)
+    axm = plt.subplot2grid((2, 3), (0, 1), colspan=2, rowspan=3)
 
     ani = animation.FuncAnimation(fig, render, interval=2000)
 

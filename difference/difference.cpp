@@ -56,12 +56,12 @@ Polygon reflect(Polygon polygon) {
 
 int main() {
     Polygon polyA;
-    for (auto p : { Point(1, 3), Point(5, 3), Point(5, 6), Point(3, 7), Point(1, 7) }) {
+    for (auto p : { Point(2, 2), Point(8, 2), Point(8, 8) }) {
         polyA.push_back(p);
     }
 
     Polygon polyB;
-    for (auto p : { Point(0, 2), Point(2, 2), Point(0, 3) }) {
+    for (auto p : { Point(0, 0), Point(1, 0), Point(1, 1), Point(0, 1) }) {
         polyB.push_back(p);
     }
 

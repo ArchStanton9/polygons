@@ -11,12 +11,12 @@ typedef CGAL::Polygon_with_holes_2<Kernel>                Pwh;
 
 int main(){
     Polygon polyA;
-    for (auto p : { Point(1, 1), Point(3, 1), Point(3, 4), Point(1, 4) }) {
+    for (auto p : { Point(4, 4), Point(12, 4), Point(12, 16) }) {
         polyA.push_back(p);
     }
 
     Polygon polyB;
-    for (auto p : { Point(0, 2), Point(2, 2), Point(0, 3) }) {
+    for (auto p : { Point(0, 0), Point(1, 0), Point(1, 1), Point(0, 1) }) {
         polyB.push_back(p);
     }
 
@@ -34,7 +34,7 @@ int main(){
     PolygonSerializer<Kernel> s;
     s.Serialize("polyA.p", polyA);
     s.Serialize("polyB.p", polyB);
-    s.Serialize("sum.p", sum);
+    // s.Serialize("sum.p", sum);
     s.Serialize("diff.p", diff);
     std::cin.get();
 
