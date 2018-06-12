@@ -51,8 +51,8 @@ ax = fig.add_subplot(111)
 ax.set_title('click to build line segments')
 line, = ax.plot([0], [0])  # empty line
 
-ax.set_xlim(-0.3, 0.3)
-ax.set_ylim(-0.3, 0.3)
+ax.set_xlim(4, 10)
+ax.set_ylim(4, 10)
 linebuilder = LineBuilder(line)
 
 plt.show()

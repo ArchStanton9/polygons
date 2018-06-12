@@ -17,7 +17,7 @@ def render(i):
     if i > 0:
         changed = any(p.is_changed for p in polygon_views)
         if not changed:
-            print(f"{i} no changes")
+            # print(f"{i} no changes")
             return
 
     ax.clear()
@@ -47,7 +47,7 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         paths = sys.argv[1:]
     else:
-        paths = ["./examples/1/results/W_*.txt"]
+        paths = ["./examples/3/results/W_*.txt"]
 
     polygon_views = [PolygonSetView(p) for p in extend_file_paths(paths)]
 

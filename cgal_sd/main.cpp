@@ -29,6 +29,7 @@ using Polygon_set_2 = CGAL::Polygon_set_2<Kernel>;
 // My constructions:
 using Polygons_with_holes_2 = std::list<Polygon_with_holes_2>;
 using Generic_polygon_2 = Generic_polygon<Polygons_with_holes_2, Polygon_set_2>;
+using Simplify = Polygon_simplify<Kernel>;
 
 namespace po = boost::program_options;
 using namespace std;
@@ -41,6 +42,7 @@ int precision;
 int steps;
 double dt;
 bool write_sum;
+bool keep_shape;
 double threshold_ratio; 
 
 
@@ -70,25 +72,41 @@ bool try_write_step_to_file(Generic_polygon_2 polygon, int step, string_view fil
 int run_algorithm(Generic_polygon_2 & P, Generic_polygon_2 & Q, Generic_polygon_2 & M) {
 	int i = 0;
 	Generic_polygon_2 S;
-
+    
     if (std::abs(dt - 1.0) > std::pow(0.1, 10))
     {
         clog << "scale P and Q with factor " << dt << "\n";
         P.scale(dt);
         Q.scale(dt);
     }
-    
-    if (threshold_ratio > 1 / 10000000){
+
+    if (threshold_ratio > 1 / 10000000) {
         clog << "simplify input polygons with threshold ratio " << threshold_ratio << "\n";
-        simplify_gp(M, threshold_ratio);
+
         simplify_gp(P, threshold_ratio);
         simplify_gp(Q, threshold_ratio);
+
+        if (keep_shape) {
+            Simplify simplify;
+            Generic_polygon_2 plain_M;
+
+            simplify(M, plain_M,
+            CGAL::Polyline_simplification_2::Scaled_squared_distance_cost{},
+            CGAL::Polyline_simplification_2::Stop_above_cost_threshold{threshold_ratio});
+    
+            M = plain_M;   
+        } 
+        else {
+            simplify_gp(M, threshold_ratio);
+        }
     }
+
+    try_write_step_to_file(M, 0, "W_");
 
 	try {
 		for (; i < steps; i++) {
 			minkowski_sum(M, P, S);
-			if (write_sum && !try_write_step_to_file(S, i, "S_")) {
+			if (write_sum && !try_write_step_to_file(S, i + 1, "S_")) {
 				return -11;
 			}
 
@@ -98,7 +116,7 @@ int run_algorithm(Generic_polygon_2 & P, Generic_polygon_2 & Q, Generic_polygon_
             //     simplify_gp(M, threshold_ratio);
             // }
 
-			if (!try_write_step_to_file(M, i, "W_")) {
+			if (!try_write_step_to_file(M, i + 1, "W_")) {
 				return -12;
 			}
 		}
@@ -129,6 +147,7 @@ int main(int argc, char *argv[]) {
             ("dt", po::value<double>()->default_value(1.0), "Time delta")
 			("pr", po::value<int>()->default_value(14), "Precision of contours points io")
             ("tr", po::value<double>()->default_value(0.0), "Contour simplification threshold ratio")
+            ("ks", po::bool_switch()->default_value(false), "Keep shape of polyline set while simplification.")
 			("ws", po::bool_switch()->default_value(false), "Save obtained minkowski sum at every step.");
 
 		po::variables_map vm;
@@ -152,6 +171,7 @@ int main(int argc, char *argv[]) {
         dt = vm["dt"].as<double>();
 		precision = vm["pr"].as<int>();
 	    write_sum = vm["ws"].as<bool>();
+        keep_shape = vm["ks"].as<bool>();
         threshold_ratio = vm["tr"].as<double>();
 
 		clog 

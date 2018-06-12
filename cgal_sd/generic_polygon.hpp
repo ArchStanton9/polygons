@@ -205,7 +205,20 @@ public:
     return _ps;
   }
   
+  Polygons_with_holes & polygons_with_holes_reset()
+  {
+    _ph_changed = true;
+    _bbox_ready = false;
+    return _ph;
+  }
   
+  Polygon_set & polygon_set_reset()
+  {
+    _ps_changed = true;
+    _bbox_ready = false;
+    return _ps;
+  }
+
   void clear()
   {
     _ph.clear();
@@ -216,7 +229,8 @@ public:
     _bbox = CGAL::Bbox_2{};
     _bbox_ready = true;
   }
-  
+
+
   
   void reflect()
   {

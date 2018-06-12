@@ -5,9 +5,12 @@ echo "running example ${1}"
     --p "./examples/${1}/p.txt" \
     --q "./examples/${1}/q.txt" \
     --m "./examples/${1}/m.txt" \
-    -o "./examples/${1}/results/" --dt 0.2 --steps 50
+    -o "./examples/${1}/results/" --dt 0.2 --steps 50 --tr 0.01
 
-    
+    # --dt 0.2 --steps 50 --tr 0.0001
+
+
+
 OUT=$?
 echo "Exit code: ${OUT}"
 

@@ -1,10 +1,13 @@
 import math
 
 pi = 3.14
-n = 100
-r = 5
+n = 21
+r = 0.45
+a = 1
+b = 1
+
 points = [
-    (math.cos(2 * pi / n * x) * r, math.sin(2 * pi / n * x) * r)
+    ( a * math.cos(2 * pi / n * x) * r + 6,  b * math.sin(2 * pi / n * x) * r + 6.5)
     for x in range(0, n)
 ]
 
