@@ -12,7 +12,7 @@ def render(i):
     if i > 0:
         changed = any(p.is_changed for p in polygon_views)
         if not changed:
-            print(f"{i} no changes")
+            # print(f"{i} no changes")
             return
     
     patches = []

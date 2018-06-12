@@ -1,8 +1,8 @@
 \documentclass{beamer}
 
   \mode<presentation> {
-    \usetheme{boxes}
-    \usecolortheme{seagull}
+    \usetheme{Madrid}
+    % \usecolortheme{seagull}
   }
   
   \usepackage{pscyr}
@@ -13,16 +13,18 @@
   \usepackage{booktabs}
   \usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools}
   \usepackage{euscript}
-  \usepackage{mathrsfs} 
+  \usepackage{mathrsfs}
 
   %----------------------------------------------------------
   %   META
   %----------------------------------------------------------
 
-  \title[ОТЧЕТ по производственной  практике]{Задача аппроксимации максимального стабильного моста в позиционной дифференциальной игре}  
+
+
+  \title[Аппроксимация стабильного моста]{Задача аппроксимации максимального стабильного моста в позиционных дифференциальных играх}  
   \author{Кощеев Никита}
   \institute[УрФУ]{Институт естественных наук и математики}
-  \date{30 января 2018}
+  \date{15 июня 2018}
 
   \mathtoolsset{showonlyrefs=true}
   \graphicspath{ {images/} }
@@ -53,10 +55,6 @@
   %   PRESENTATION SLIDES
   %----------------------------------------------------------------------------------------
   
-  %------------------------------------------------
-  \section{Постановка задачи} 
-  %------------------------------------------------
-
   \begin{frame}
     \frametitle{Пример игры}
   
@@ -64,19 +62,21 @@
         \frac{dx}{dt} = u + v, u \in P, v \in Q
     \end{equation}
 
-    $R \subset \dimension$ - целевое множество 
+    $M \subset \dimension$ - Терминальное(целевое) множество 
     \vspace{5mm}
   
     $\theta$ - момент окончания игры
 
-    Цель первого игрока: обеспечить $x(\theta) \in R$
+    Цель первого игрока: обеспечить $x(\theta) \in M$
 
-    Цель второго игрока: обеспечить $x(\theta) \notin R$
+    Цель второго игрока: обеспечить $x(\theta) \notin M$
 
   \end{frame}
+
   
+
   %------------------------------------------------
-  
+
   \begin{frame}
     \frametitle{Стабильный мост}
 
@@ -95,25 +95,42 @@
   
   %------------------------------------------------
   
-  \section{Решение}
-  
-  %------------------------------------------------
-  
   \begin{frame}
-    \frametitle{Алгоритм}
-
-    $0=t_n, t_{n-1}, ..., t_1, t_0=\theta$
-
-    $\Delta$ - шаг разбиения 
-
-    Хотим получить набор \textit{t}-сечений моста W
-
-    $S_i = W_i \oplus \Delta P$
+    \frametitle{Терминальное множество}
     
-    $W_{i+1} = S_i \ominus \Delta  Q$
+    Замкнутое множество в пространстве $\dimension$
+
+    \begin{block}{Типы терминальных множеств}
+      \begin{itemize}
+        \item произвольный невыпуклый многоугольник
+        \item многоугольник содержащий внутри себя отверстие
+        \item множество произвольных многоугольников содержащих произвольное число отверстий
+      \end{itemize}
+    \end{block}
 
   \end{frame}
   
+   %------------------------------------------------
+
+   \subsection{CGAL} 
+  
+   \begin{frame}
+     \frametitle{CGAL}
+     \includegraphics[width=1.0\textwidth]{cgal-logo}
+ 
+     The Computational Geometry Algorithms Library
+ 
+     Компоненты:
+ 
+     \begin{itemize}
+         \item 2D and 3D Linear Geometry Kernel
+         \item 2D Polygons
+         \item 2D Minkowski Sums
+         \item 2D Polyline Simplification
+     \end{itemize}
+ 
+    \end{frame}
+
 
   %------------------------------------------------
   
@@ -126,7 +143,7 @@
       A \oplus B =  \{ x + y | x \in A, y \in B \} 
     \end{equation}
 
-    \includegraphics[width=1.0\textwidth]{minkowski_sum}
+    \includegraphics[width=1.0\textwidth]{sum}
   
   \end{frame}
   
@@ -142,32 +159,170 @@
     \begin{equation}
         A \ominus B =
         (\overline{\overline{A} \oplus (- B)})
-    \end{equation}    
+    \end{equation}  
+
+    \begin{figure}
+        \includegraphics[scale=0.4]{diff}
+    \end{figure}
 
   \end{frame}
   
   %------------------------------------------------
-
-  \subsection{CGAL} 
   
   \begin{frame}
-    \frametitle{CGAL}
-    \includegraphics[width=1.0\textwidth]{cgal-logo}
+    \frametitle{Упрощение множеств}
 
-    The Computational Geometry Algorithms Library
+    \begin{figure}
+        \includegraphics[width=1.0\textwidth]{spiral_simple}
+    \end{figure}
 
-    Компоненты:
+  \end{frame}
 
-    \begin{itemize}
-        \item 2D and 3D Linear Geometry Kernel
-        \item 2D Polygons
-        \item 2D Minkowski Sums
-        \item 2D Polyline Simplification
-    \end{itemize}
-
-    \end{frame}
 
   %------------------------------------------------ 
+
+  \begin{frame}
+    \frametitle{Удаление вершин}
+
+    \begin{figure}
+        \includegraphics[width=1.0\textwidth]{platelet}
+    \end{figure}
+
+  \end{frame}
+
+  %------------------------------------------------ 
+
+  
+  \begin{frame}
+    \frametitle{Пример задачи}
+
+    \begin{block}{Условия}
+      \begin{itemize}
+        \item $\theta = 10 с$ - момент окончания
+
+        \item $\Delta t = 0.2$ - шаг разбиения $\{t_i\}, t_n = \theta$
+
+        \item $P$, $Q$ - возможные управления игроков
+
+        \item $M$ - терминальное множество
+
+      \end{itemize}
+    \end{block}
+
+    \begin{block}{Хотим получить}
+      Набор \textit{t}-сечений стабильного моста $\{W_{i}\}$  
+    \end{block}
+
+    \begin{block}{Формула}
+      $W_0 = M$
+
+      $W_{i+1} = ( W_i \oplus P ) \ominus  Q$
+    \end{block}
+
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{Задача сближения-уклонения}
+
+    \begin{figure}
+        \includegraphics[width=\linewidth,height=0.8\textheight,keepaspectratio]{example1_pqm}
+    \end{figure}
+
+  \end{frame}  
+
+  %----------------------------------------------------------------------------------------
+
+  \begin{frame}
+    \frametitle{Задача сближения-уклонения мост спереди}
+
+    \begin{figure}
+        \includegraphics[width=\linewidth,height=0.8\textheight,keepaspectratio]{example1_bridge_front}
+    \end{figure} 
+
+  \end{frame}
+
+  %----------------------------------------------------------------------------------------
+
+  \begin{frame}
+    \frametitle{Задача сближения-уклонения мост сзади}
+
+    \begin{figure}
+        \includegraphics[width=\linewidth,height=0.8\textheight,keepaspectratio]{example1_bridge_back}
+    \end{figure} 
+
+  \end{frame}
+
+  %----------------------------------------------------------------------------------------
+
+  \begin{frame}
+    \frametitle{Задача наблюдения}
+
+    \begin{figure}
+        \includegraphics[width=\linewidth,height=0.8\textheight,keepaspectratio]{example2_pqm}
+    \end{figure}
+
+  \end{frame}  
+
+  %----------------------------------------------------------------------------------------
+
+  \begin{frame}
+    \frametitle{Задача наблюдения мост спереди}
+
+    \begin{figure}
+        \includegraphics[width=\linewidth,height=0.8\textheight,keepaspectratio]{example2_bridge_front}
+    \end{figure} 
+
+  \end{frame}
+
+  %----------------------------------------------------------------------------------------
+
+  \begin{frame}
+    \frametitle{Задача наблюдения мост сзади}
+
+    \begin{figure}
+        \includegraphics[width=\linewidth,height=0.8\textheight,keepaspectratio]{example2_bridge_back}
+    \end{figure} 
+
+  \end{frame}
+
+
+  %----------------------------------------------------------------------------------------
+
+  \begin{frame}
+    \frametitle{Задача со сложным терминальным множеством}
+
+    \begin{figure}
+        \includegraphics[width=\linewidth,height=0.8\textheight,keepaspectratio]{example3_pqm}
+    \end{figure}
+
+  \end{frame}  
+
+  %----------------------------------------------------------------------------------------
+
+  \begin{frame}
+    \frametitle{Задача со сложным терминальным множеством мост спереди}
+
+    \begin{figure}
+        \includegraphics[width=\linewidth,height=0.8\textheight,keepaspectratio]{example3_bridge_front}
+    \end{figure} 
+
+  \end{frame}
+
+  %----------------------------------------------------------------------------------------
+
+  \begin{frame}
+    \frametitle{Задача со сложным терминальным множеством мост сзади}
+
+    \begin{figure}
+        \includegraphics[width=\linewidth,height=0.8\textheight,keepaspectratio]{example3_bridge_back}
+    \end{figure} 
+
+  \end{frame}
+
+  %----------------------------------------------------------------------------------------
+
+
+
   \begin{frame}
   \Huge{\centerline{Спасибо за внимание}}
   \end{frame}

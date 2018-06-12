@@ -15,7 +15,6 @@ gnuplot -persist <<-EOFMarker
     set style fill transparent solid 
     set ytics 1
     set xtics 1
-    set grid
     plot \
     '$a' title 'a' with filledcurves closed ,\
     '$b' title 'b' with filledcurves closed ,\

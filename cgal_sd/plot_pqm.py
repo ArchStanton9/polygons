@@ -56,10 +56,10 @@ if __name__ == '__main__':
     import argparse
 
     parser = argparse.ArgumentParser(description='Plot two polygons P,Q and target set M.')
-    parser.add_argument('--p', default="./examples/3/p.txt", help='polyon P')
-    parser.add_argument('--q', default="./examples/3/q.txt", help='polyon Q')
-    parser.add_argument('--m', default="./examples/3/m.txt", help='polyon M')
-    parser.add_argument('--results', '-o', default="./examples/2/results/")
+    parser.add_argument('--p', default="./examples/1/p.txt", help='polyon P')
+    parser.add_argument('--q', default="./examples/1/q.txt", help='polyon Q')
+    parser.add_argument('--m', default="./examples/1/m.txt", help='polyon M')
+    parser.add_argument('--results', '-o', default="./examples/1/results/")
     parser.add_argument('-s', '--style', default='seaborn-bright',
                         help=f'Plot style. Available: {str(", ").join(style.available)}.')
 
@@ -75,6 +75,7 @@ if __name__ == '__main__':
     axm = plt.subplot2grid((2, 3), (0, 1), colspan=2, rowspan=3)
 
     ani = animation.FuncAnimation(fig, render, interval=2000)
+    plt.show()
     # render(0)
     # plt.savefig("E:\\Dev\\master\\images\\example3_pqm.pdf", format="pdf")
-    plt.show()
+    
