@@ -22,14 +22,14 @@ def render(ax):
         patches = [PathPatch(p,
                              facecolor=cmap(z),
                              # edgecolor=colors.to_rgba('gray', 0.8),
-                             linestyle='dotted',
+                             # linestyle='dotted',
                              linewidth=0.2)
                    for p in polygon.fetch_paths()]
         add_patches(patches, ax, z)
 
-    ax.set_xlim(4, 10)
+    ax.set_xlim(0, 10)
     ax.set_ylim(0, 10)
-    ax.set_zlim(4, 10) # 0,6 for example 1
+    ax.set_zlim(0, 6) # 0,6 for example 1
 
     ax.yaxis.set_label_text("t", fontsize=32)
     ax.xaxis.set_label_text("x", fontsize=32)
@@ -47,7 +47,7 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         paths = sys.argv[1:]
     else:
-        paths = ["./examples/3/results/W_*.txt"]
+        paths = ["./examples/1/results/W_*.txt"]
 
     polygon_views = [PolygonSetView(p) for p in extend_file_paths(paths)]
 
@@ -65,16 +65,16 @@ if __name__ == '__main__':
     render(ax2)
 
     # example 1
-    # ax1.view_init(elev=29., azim=-137)
-    # ax2.view_init(elev=10., azim=41)
+    ax1.view_init(elev=29., azim=-137)
+    ax2.view_init(elev=10., azim=41)
 
     # example 2
     # ax1.view_init(elev=7., azim=-115)
     # ax2.view_init(elev=17., azim=117)
 
     # example 3
-    ax1.view_init(elev=16., azim=-125)
-    ax2.view_init(elev=27., azim=140)
+    # ax1.view_init(elev=16., azim=-125)
+    # ax2.view_init(elev=27., azim=140)
 
 
     plt.tight_layout()

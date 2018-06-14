@@ -104,6 +104,8 @@ int run_algorithm(Generic_polygon_2 & P, Generic_polygon_2 & Q, Generic_polygon_
     try_write_step_to_file(M, 0, "W_");
 
 	try {
+        P.reflect();
+
 		for (; i < steps; i++) {
 			minkowski_sum(M, P, S);
 			if (write_sum && !try_write_step_to_file(S, i + 1, "S_")) {

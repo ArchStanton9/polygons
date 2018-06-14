@@ -28,9 +28,9 @@ def render(i):
         patches = [PathPatch(p, facecolor=cmap(z), linewidth=0.2) for p in polygon.fetch_paths()]
         add_patches(patches, z)
 
-    ax.set_xlim(2, 10)
+    ax.set_xlim(0, 10)
     ax.set_ylim(0, 10)
-    ax.set_zlim(2, 10)
+    ax.set_zlim(0, 10)
 
     ax.yaxis.set_label_text("t")
     ax.xaxis.set_label_text("x")

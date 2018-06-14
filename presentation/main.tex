@@ -23,7 +23,7 @@
 
   \title[Аппроксимация стабильного моста]{Задача аппроксимации максимального стабильного моста в позиционных дифференциальных играх}  
   \author{Кощеев Никита}
-  \institute[УрФУ]{Институт естественных наук и математики}
+  \institute[УрФУ]{Институт естественных наук и математики\\[0.5em]Кафедра прикладной математики и механики}
   \date{15 июня 2018}
 
   \mathtoolsset{showonlyrefs=true}
@@ -56,20 +56,25 @@
   %----------------------------------------------------------------------------------------
   
   \begin{frame}
-    \frametitle{Пример игры}
+    \frametitle{Дифференциальная игра}
+    \framesubtitle{динамика}
   
+Динамика игры:
+
     \begin{equation}
-        \frac{dx}{dt} = u + v, u \in P, v \in Q
+        \frac{dx}{dt} = u + v, \quad x(t_0) = x_0,
     \end{equation}
 
-    $M \subset \dimension$ - Терминальное(целевое) множество 
-    \vspace{5mm}
-  
-    $\theta$ - момент окончания игры
+    \vspace{0.5em}
 
-    Цель первого игрока: обеспечить $x(\theta) \in M$
+    где 
 
-    Цель второго игрока: обеспечить $x(\theta) \notin M$
+\begin{itemize}
+\item $x(t) \in \dimension$, 
+\item первый игрок выбирает $u(t) \in P$, 
+\item второй игрок выбирает $v(t) \in Q,$
+\item $P$ и $Q$ --- выпуклые компакты в $\dimension$.
+\end{itemize}
 
   \end{frame}
 
@@ -78,18 +83,69 @@
   %------------------------------------------------
 
   \begin{frame}
-    \frametitle{Стабильный мост}
+    \frametitle{Дифференциальная игра}
+    \framesubtitle{цели игроков}
+  
+Динамика игры:
 
-    $W \in [t_0, \theta] \times \dimension$ - стабильный мост
+    \begin{equation}
+        \frac{dx}{dt} = u + v, \quad x(t_0) = x_0.
+    \end{equation}
 
-    $W(\theta)=R$
+    \vspace{0.5em}
 
-    \begin{itemize}
-      \item Применение оптимального управления первым игроком,
-      при $x_0 \in W(t_0)$ гарантирует $x(\theta) \in R$
-      \item Применение оптимального управления вторым игроком,
-      при $x_0 \notin W(t_0)$ гарантирует $x(\theta) \notin R$
-    \end{itemize}
+Пусть задано $M$ --- замкнутое терминальное (целевое) множество.
+    \vspace{5mm}
+  
+\begin{itemize}
+\item Цель первого игрока: обеспечить $x(\theta) \in M$.
+\item Цель второго игрока: обеспечить $x(\theta) \notin M$.
+\item $\theta > t_0$ --- момент окончания игры.
+\end{itemize}
+
+  \end{frame}
+
+
+
+  %------------------------------------------------
+
+\begin{frame}
+   \frametitle{Стратегии игроков}
+
+Следуя\footnote{Н.Н. Красовский, А.И. Субботин. \emph{Позиционные дифференциальные игры}. М.: <<Наука>>. 1974.} будем рассматривать игру в чистых позиционных стратегиях, определяемых как измеримые функции:
+
+\begin{itemize}
+\item $u(t, x)$ --- стратегия первого игрока,
+\item $v(t, x)$ --- стратегия второго игрока.
+\end{itemize}
+
+\vspace{0.5em}
+
+При численном построении предполагается, что $u(t, x)$ и $v(t, x)$ кусочно-постоянные по $t$ при фиксированном $x$.
+
+\end{frame}
+  
+
+  %------------------------------------------------
+
+  \begin{frame}
+    \frametitle{Максимальный стабильный мост}
+
+\hphantom{A\footnote{Там же, с. 69.}}
+
+\begin{block}{Теорема об альтернативе$^2$}
+
+Для всякой начальной позиции $(t_0, x_0)$, $t_0 < \vartheta$, справедливо одно из двух утверждений:
+
+\begin{enumerate}
+\item Найдется стратегия $u_c(t,x)$, обеспечивающая $x[\vartheta] \in M$.
+\item Найдутся $\varepsilon > 0$ и стратегия $v_c(t,x)$, обеспечивающая $x[\vartheta] \notin O_\varepsilon(M)$.
+\end{enumerate}
+\end{block}
+
+\vspace{1em}
+
+Множество $W \subset [t_0, \theta] \times \dimension$ всех позиций $(t_0, x_0)$, для которых справедлива первое утверждение, назовем \emph{максимальным стабильным мостом.}
 
   \end{frame}
   
@@ -98,7 +154,9 @@
   \begin{frame}
     \frametitle{Терминальное множество}
     
-    Замкнутое множество в пространстве $\dimension$
+   В качестве терминального множества $M$ программная реализация алгоритма аппроксимации моста может принимать ограниченное многоугольное множество общего вида.
+
+\vspace{1em}
 
     \begin{block}{Типы терминальных множеств}
       \begin{itemize}
@@ -120,11 +178,10 @@
  
      The Computational Geometry Algorithms Library
  
-     Компоненты:
+     Используемые компоненты:
  
      \begin{itemize}
-         \item 2D and 3D Linear Geometry Kernel
-         \item 2D Polygons
+         \item 2D Polygon Boolean Operations
          \item 2D Minkowski Sums
          \item 2D Polyline Simplification
      \end{itemize}
@@ -137,7 +194,7 @@
   \begin{frame}
     \frametitle{Алгебраическая сумма}
     
-    Другое название - "сумма Минковского". 
+    Другое название --- <<сумма Минковского>>.
     
     \begin{equation}
       A \oplus B =  \{ x + y | x \in A, y \in B \} 
@@ -216,10 +273,12 @@
     \begin{block}{Формула}
       $W_0 = M$
 
-      $W_{i+1} = ( W_i \oplus P ) \ominus  Q$
+      $W_{i+1} = ( W_i \oplus  -P ) \ominus  Q$
     \end{block}
 
   \end{frame}
+
+  %------------------------------------------------ 
 
   \begin{frame}
     \frametitle{Задача сближения-уклонения}
